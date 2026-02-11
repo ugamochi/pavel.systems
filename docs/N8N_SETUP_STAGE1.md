@@ -148,11 +148,11 @@ This guide walks you through setting up the **Stage 1** contact form backend usi
 
 ```html
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px;">
-  <h2 style="color: #C8FF00; background: #0A0A0B; padding: 20px; margin: 0;">
+  <h2 style="color: #a17ff7; background: #0b0b0b; padding: 20px; margin: 0;">
     🔥 New Lead from pavel.systems
   </h2>
 
-  <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #C8FF00;">
+  <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #a17ff7;">
     <p style="margin: 0 0 10px 0;"><strong>Name:</strong> {{ $json.name }}</p>
     <p style="margin: 0 0 10px 0;"><strong>Email:</strong> <a href="mailto:{{ $json.email }}">{{ $json.email }}</a></p>
     <p style="margin: 0 0 10px 0;"><strong>Company:</strong> {{ $json.company || 'Not provided' }}</p>
@@ -169,8 +169,8 @@ This guide walks you through setting up the **Stage 1** contact form backend usi
     </p>
   </div>
 
-  <div style="margin-top: 20px; padding: 15px; background: #C8FF00; text-align: center;">
-    <a href="mailto:{{ $json.email }}" style="color: #0A0A0B; text-decoration: none; font-weight: 600;">
+  <div style="margin-top: 20px; padding: 15px; background: #a17ff7; text-align: center;">
+    <a href="mailto:{{ $json.email }}" style="color: #0b0b0b; text-decoration: none; font-weight: 600;">
       📧 Reply to this lead
     </a>
   </div>
@@ -193,9 +193,9 @@ This guide walks you through setting up the **Stage 1** contact form backend usi
 
 ```html
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
-  <div style="background: #0A0A0B; padding: 30px; text-align: center;">
-    <h1 style="color: #C8FF00; font-family: 'JetBrains Mono', monospace; font-size: 18px; margin: 0;">
-      pavel<span style="color: #C8FF00;">.</span>systems
+  <div style="background: #0b0b0b; padding: 30px; text-align: center;">
+    <h1 style="color: #a17ff7; font-family: 'JetBrains Mono', monospace; font-size: 18px; margin: 0;">
+      pavel<span style="color: #a17ff7;">.</span>systems
     </h1>
   </div>
 
@@ -214,7 +214,7 @@ This guide walks you through setting up the **Stage 1** contact form backend usi
 
     <p style="font-size: 16px; line-height: 1.6; color: #333;">
       In the meantime, feel free to check out case studies and resources on
-      <a href="https://pavel.systems" style="color: #C8FF00; text-decoration: none; font-weight: 600;">pavel.systems</a>.
+      <a href="https://pavel.systems" style="color: #a17ff7; text-decoration: none; font-weight: 600;">pavel.systems</a>.
     </p>
 
     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
@@ -291,7 +291,7 @@ https://yourinstance.app.n8n.cloud/webhook/lead-form
 ### 5.2 Update index.html
 
 1. Open `index.html` in your editor
-2. Find line ~2129: `const webhookUrl = 'YOUR_N8N_WEBHOOK_URL';`
+2. Find line ~2303: `const webhookUrl = 'YOUR_N8N_WEBHOOK_URL';`
 3. Replace with your actual webhook URL:
 
 ```javascript

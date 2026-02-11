@@ -1,24 +1,24 @@
 # pavel.systems
 
-> Personal portfolio website for Pavel Ugamoti — Agentic Architect
+> Personal portfolio website for Pavel Ugamoti -- Agentic Architect
 
 A single-page portfolio website showcasing AI automation services for professional services businesses (law firms, accounting practices, and service agencies).
 
-## 🌟 Features
+## Features
 
-- **Modern Design**: Dark theme with lime accent, professional typography, smooth animations
+- **Modern Design**: Dark charcoal theme (#0b0b0b) with warm cream text (#e7e6d9) and subtle violet accent (#6236f4)
 - **AI-Powered Contact Form**: Lead capture with planned AI qualification pipeline
-- **GSAP Animations**: Scroll-triggered animations, magnetic buttons, card hover effects
-- **Fully Responsive**: Mobile-first design with breakpoints at 1024px, 768px, and 480px
-- **Accessibility**: Semantic HTML, ARIA labels, skip links, keyboard navigation
-- **Performance**: Single-file architecture, optimized loading, ~50KB HTML
+- **GSAP Animations**: Scroll-triggered reveals, count-up numbers, parallax glow, staggered cards
+- **Fully Responsive**: Breakpoints at 1024px, 768px, and 480px with mobile hamburger nav
+- **Accessibility**: Skip links, ARIA labels, keyboard nav, prefers-reduced-motion, WCAG AA contrast
+- **Performance**: Single-file architecture, no build step, ~80KB HTML
 
-## 🛠 Tech Stack
+## Tech Stack
 
 **Frontend:**
 - Pure HTML5, CSS3, JavaScript (no framework)
 - GSAP 3.12.5 + ScrollTrigger for animations
-- Google Fonts: Instrument Serif, DM Sans, JetBrains Mono
+- Google Fonts: Inter, JetBrains Mono
 - CSS Custom Properties for theming
 
 **Backend (Contact Form - Planned):**
@@ -27,30 +27,32 @@ A single-page portfolio website showcasing AI automation services for profession
 - Google Sheets for lead tracking
 - OpenAI/Anthropic API for AI lead scoring
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 pavel.systems/
-├── index.html          # Single-file website (2,080+ lines)
-│   ├── CSS (lines 11-1253)
-│   ├── HTML (lines 1255-1774)
-│   └── JavaScript (lines 1776-2178)
-├── README.md           # This file
-├── .gitignore          # Git exclusions
-└── n8n-workflows/      # (To be created) n8n workflow exports
+├── index.html              # Single-file website (2,364 lines)
+│   ├── CSS (lines 29-1416)
+│   ├── HTML (lines 1417-1962)
+│   └── JavaScript (lines 1963-2363)
+├── README.md               # This file
+├── .gitignore              # Git exclusions
+├── docs/
+│   └── N8N_SETUP_STAGE1.md # n8n Stage 1 setup guide
+└── n8n-workflows/          # (To be created) n8n workflow exports
     ├── stage-1-basic.json
     ├── stage-2-sheets.json
     ├── stage-3-ai-scoring.json
     └── stage-4-automated.json
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Local Development
 
 1. **Clone the repository:**
 ```bash
-git clone http://local_proxy@127.0.0.1:45468/git/ugamochi/pavel.systems
+git clone https://github.com/ugamochi/pavel.systems.git
 cd pavel.systems
 ```
 
@@ -62,7 +64,7 @@ python3 -m http.server 8000
 # Using Node.js
 npx serve
 
-# Or just open index.html directly in your browser
+# Or just open index.html directly
 open index.html
 ```
 
@@ -72,39 +74,20 @@ open index.html
 
 This is a static HTML website with no build dependencies. The entire site is contained in `index.html`.
 
-## 📧 Contact Form Setup
+## Contact Form Setup
 
 The contact form is currently in development mode. To enable it:
 
 ### Stage 1: Basic Email Notifications
 
-1. **Set up n8n:**
-   - Create account at https://cloud.n8n.io
-   - Or self-host: https://docs.n8n.io/hosting/
+See **[docs/N8N_SETUP_STAGE1.md](docs/N8N_SETUP_STAGE1.md)** for the full walkthrough.
 
-2. **Configure Gmail:**
-   - In n8n: Credentials → Add Credential → Gmail OAuth2
-   - Follow OAuth flow to connect your Gmail account
-
-3. **Create Workflow:**
-   - Import `n8n-workflows/stage-1-basic.json` (once created)
-   - Or manually create:
-     1. Webhook node (POST /lead-form)
-     2. Set node (clean data)
-     3. Gmail node #1 (notify yourself)
-     4. Gmail node #2 (confirm to lead)
-     5. Webhook Response node
-
-4. **Update Website:**
-   - In `index.html` line ~2121, replace:
-     ```javascript
-     const webhookUrl = 'YOUR_N8N_WEBHOOK_URL';
-     ```
-   - With your actual n8n webhook URL
-
-5. **Test:**
-   - Submit test form
-   - Check emails received
+**Quick summary:**
+1. Create n8n cloud account at https://cloud.n8n.io
+2. Configure Gmail OAuth2 credential
+3. Create webhook workflow (Webhook -> Set -> Gmail x2)
+4. Replace `YOUR_N8N_WEBHOOK_URL` in `index.html` line ~2303
+5. Test and deploy
 
 ### Stage 2-4: Advanced Features
 
@@ -113,26 +96,15 @@ See `docs/FORM_SETUP.md` (to be created) for:
 - AI lead scoring
 - Automated personalized responses
 
-## 🌐 Deployment
+## Deployment
 
 ### Option 1: Netlify (Recommended)
 
-1. **Connect repository:**
-   - Log in to Netlify
-   - New Site → Import from Git
-   - Select this repository
-
-2. **Configure:**
-   - Build command: (leave empty)
-   - Publish directory: `/`
-
-3. **Deploy:**
-   - Click "Deploy site"
-   - Site will be live at `https://your-site.netlify.app`
-
-4. **Custom domain:**
-   - Site settings → Domain management
-   - Add custom domain: `pavel.systems`
+1. Log in to Netlify -> New Site -> Import from Git
+2. Select this repository
+3. Build command: (leave empty)
+4. Publish directory: `/`
+5. Add custom domain: `pavel.systems`
 
 ### Option 2: Vercel
 
@@ -145,49 +117,35 @@ vercel
 
 1. Upload `index.html` to your web server
 2. Ensure HTTPS is enabled
-3. Done!
 
-## 📝 Content Sections
+## Content Sections
 
-1. **Navigation** - Fixed header with smooth scroll
-2. **Hero** - Value proposition + proof metrics
+1. **Navigation** - Fixed header with smooth scroll + mobile hamburger
+2. **Hero** - Value proposition + proof metrics (40+ systems, 90%, <24h)
 3. **Problem** - Client pain points (3 cards)
-4. **Services** - 6 service offerings with metrics
-5. **Process** - 3-phase workflow
+4. **Services** - 6 service offerings with metrics and tech tags
+5. **Process** - 3-phase workflow (Audit, Build, Deploy)
 6. **Results** - Impact metrics (4 cards)
-7. **Audience** - Target industries (3 cards)
-8. **Framework** - "Agentic Stack" explanation
+7. **Audience** - Target industries (Law, Accounting, Agencies)
+8. **Framework** - "Agentic Stack" 4-layer visual
 9. **Testimonials** - Client quotes (2 testimonials)
-10. **FAQ** - 8 frequently asked questions
-11. **CTA + Contact Form** - Lead capture form
-12. **Footer** - Copyright + social links
+10. **FAQ** - 8 questions across 2 columns
+11. **CTA + Contact Form** - Lead capture with cream background
+12. **Footer** - Copyright + LinkedIn/Email links
 
-## 🔧 Customization
-
-### Update Contact Information
-
-Replace placeholder content in `index.html`:
-
-**Social Links** (lines 1769-1771):
-```html
-<li><a href="https://linkedin.com/in/YOUR_PROFILE">LinkedIn</a></li>
-<li><a href="https://twitter.com/YOUR_HANDLE">X / Twitter</a></li>
-```
-
-**Footer Copyright** (line 1767):
-```html
-<div class="footer-left">&copy; 2026 Pavel Ugamoti. Agentic Architect.</div>
-```
+## Customization
 
 ### Update Colors
 
-Edit CSS custom properties (lines 12-29):
+Edit CSS custom properties in `:root` (line 30):
 ```css
 :root {
-  --bg: #0A0A0B;              /* Background */
-  --accent: #C8FF00;          /* Lime accent */
-  --text-primary: #F0EEE6;    /* Primary text */
-  /* ... */
+  --bg: #0b0b0b;              /* Background */
+  --bg-card: #161616;          /* Card surfaces */
+  --text-primary: #e7e6d9;    /* Warm cream text */
+  --text-secondary: #b9b8ae;  /* Secondary text */
+  --accent: #6236f4;          /* Violet accent (light bg) */
+  --accent-light: #a17ff7;    /* Light violet (dark bg text) */
 }
 ```
 
@@ -198,71 +156,52 @@ Add before closing `</head>` tag:
 <script defer data-domain="pavel.systems" src="https://plausible.io/js/script.js"></script>
 ```
 
-## 🧪 Testing
+## Testing
 
 **Browser Compatibility:**
-- Chrome/Edge ✓
-- Safari (macOS/iOS) ✓
-- Firefox ✓
-
-**Performance:**
-- Lighthouse score: Aim for 90+ in all categories
-- First Contentful Paint: < 1.5s
-- Time to Interactive: < 3.5s
-
-**Accessibility:**
-- WAVE checker: 0 errors
-- WCAG AA compliance ✓
+- Chrome/Edge
+- Safari (macOS/iOS)
+- Firefox
 
 **Testing Checklist:**
 - [ ] All links work
-- [ ] Mobile menu opens/closes
+- [ ] Mobile menu opens/closes (hamburger animates to X)
 - [ ] FAQ accordions expand/collapse
-- [ ] Animations work (or gracefully degrade)
+- [ ] Animations work (or gracefully degrade with prefers-reduced-motion)
 - [ ] Form validates correctly
-- [ ] Form submits successfully
+- [ ] Form submits successfully (after n8n setup)
 - [ ] Email notifications received
 
-## 📚 Resources
+## License
 
-- **GSAP Docs**: https://greensock.com/docs/
-- **n8n Docs**: https://docs.n8n.io/
-- **Deployment Guides**: See `docs/` folder (to be created)
+Copyright 2026 Pavel Ugamoti. All rights reserved.
 
-## 🤝 Contributing
+## Roadmap
 
-This is a personal portfolio site. For bugs or suggestions:
-1. Open an issue
-2. Or contact directly via the form on the site
-
-## 📄 License
-
-Copyright © 2026 Pavel Ugamoti. All rights reserved.
-
-## 🚧 Roadmap
-
-### Sprint 1 ✅ (Current)
+### Sprint 1 (Current)
 - [x] Contact form UI
-- [ ] n8n webhook setup
+- [x] Update social links
+- [x] UI/UX audit + color scheme overhaul
+- [ ] n8n webhook setup (guide ready: `docs/N8N_SETUP_STAGE1.md`)
 - [ ] Email notifications
-- [ ] Update social links
 - [ ] Deploy to production
 
-### Sprint 2 (Week 2)
+### Sprint 2
+- [x] SEO meta tags (Open Graph, Twitter Cards)
+- [x] Favicon
+- [ ] og-image for social sharing
 - [ ] Google Sheets lead tracking
-- [ ] SEO meta tags (Open Graph, Twitter Cards)
-- [ ] Favicon and og-image
-- [ ] Analytics setup
+- [ ] Analytics setup (Plausible)
 
-### Sprint 3 (Week 3)
+### Sprint 3
 - [ ] AI lead scoring
 - [ ] Conditional routing
 - [ ] Slack notifications for high-value leads
 
-### Sprint 4 (Week 4)
+### Sprint 4
+- [x] Accessibility enhancements (WCAG contrast, reduced-motion, focus states)
 - [ ] Automated personalized responses
 - [ ] Meta case study: "How I Built My Own Lead Pipeline"
-- [ ] Accessibility enhancements
 
 ### Sprint 5 (Ongoing)
 - [ ] Content updates
@@ -271,4 +210,4 @@ Copyright © 2026 Pavel Ugamoti. All rights reserved.
 
 ---
 
-Built with ❤️ by Pavel Ugamoti — Agentic Architect
+Built by Pavel Ugamoti -- Agentic Architect
