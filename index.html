@@ -25,7 +25,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0b0b0b;
@@ -45,7 +45,7 @@
       --form-bg: #e7e6d9;
       --form-text: #0b0b0b;
       --serif: Georgia, serif;
-      --sans: 'Inter', system-ui, sans-serif;
+      --sans: 'Geist', system-ui, sans-serif;
       --mono: 'JetBrains Mono', monospace;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
       --form-text-muted: #5c5c57;
@@ -188,9 +188,14 @@
     }
 
     .nav-cta:hover {
-      transform: translateY(-1px);
+      transform: translateY(-1px) scale(1.03);
       background: var(--accent-light);
-      box-shadow: 0 4px 24px rgba(98, 54, 244, 0.2);
+      box-shadow: 0 4px 24px rgba(98, 54, 244, 0.25);
+    }
+
+    .nav-cta:active {
+      transform: scale(0.97);
+      transition-duration: 0.1s;
     }
 
     .hamburger {
@@ -355,8 +360,13 @@
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(231, 230, 217, 0.15);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(231, 230, 217, 0.2);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.98);
+      transition-duration: 0.1s;
     }
 
     .btn-primary svg {
@@ -471,7 +481,8 @@
     ═══════════════════════════════════════ */
     .problem {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .problem-grid {
@@ -483,15 +494,15 @@
 
     .problem-card {
       padding: 2rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      transition: border-color 0.3s ease, transform 0.3s var(--ease);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.4s ease, transform 0.3s var(--ease);
       cursor: pointer;
     }
 
     .problem-card:hover {
-      border-color: var(--border-bright);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
       transform: translateY(-2px);
     }
 
@@ -501,9 +512,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(98, 54, 244, 0.1);
-      border: 1px solid rgba(98, 54, 244, 0.2);
-      border-radius: 10px;
+      background: rgba(98, 54, 244, 0.08);
+      box-shadow: 0 0 0 1px rgba(98, 54, 244, 0.15);
+      border-radius: 12px;
       margin-bottom: 1.25rem;
       font-size: 1.1rem;
     }
@@ -528,7 +539,8 @@
     ═══════════════════════════════════════ */
     .services {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .services-grid {
@@ -540,18 +552,17 @@
 
     .service-card {
       padding: 2.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
       position: relative;
       overflow: hidden;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      transition: box-shadow 0.4s ease;
       cursor: pointer;
     }
 
     .service-card:hover {
-      border-color: var(--accent-dim);
-      box-shadow: 0 4px 24px rgba(98, 54, 244, 0.2);
+      box-shadow: 0 0 0 1px rgba(98, 54, 244, 0.2), 0 8px 32px rgba(98, 54, 244, 0.15);
     }
 
     /* Cursor-tracking radial glow */
@@ -579,8 +590,8 @@
       content: '';
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
+      left: 20px;
+      right: 20px;
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
       opacity: 0;
@@ -621,21 +632,21 @@
     }
 
     .service-tools span {
-      padding: 0.3rem 0.7rem;
-      background: rgba(98, 54, 244, 0.04);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      padding: 0.3rem 0.75rem;
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+      border-radius: 100px;
       font-family: var(--mono);
       font-size: 0.75rem;
       color: var(--text-muted);
       letter-spacing: 0.03em;
-      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+      transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
       cursor: pointer;
     }
 
     .service-tools span:hover {
-      background: rgba(98, 54, 244, 0.1);
-      border-color: var(--accent-dim);
+      background: rgba(98, 54, 244, 0.08);
+      box-shadow: 0 0 0 1px rgba(98, 54, 244, 0.2);
       color: var(--accent-light);
     }
 
@@ -644,9 +655,9 @@
       align-items: center;
       gap: 0.4rem;
       margin-bottom: 1.25rem;
-      padding: 0.35rem 0.8rem;
+      padding: 0.35rem 0.85rem;
       background: rgba(98, 54, 244, 0.06);
-      border-radius: 6px;
+      border-radius: 100px;
       font-family: var(--mono);
       font-size: 0.75rem;
       color: var(--accent-light);
@@ -658,7 +669,8 @@
     ═══════════════════════════════════════ */
     .process {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .process-steps {
@@ -672,13 +684,13 @@
     .process-step {
       padding: 2.5rem;
       position: relative;
-      border: 1px solid var(--border);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
       border-radius: 0;
     }
 
-    .process-step:first-child { border-radius: 16px 0 0 16px; }
-    .process-step:last-child { border-radius: 0 16px 16px 0; }
-    .process-step:not(:first-child) { border-left: none; }
+    .process-step:first-child { border-radius: 20px 0 0 20px; }
+    .process-step:last-child { border-radius: 0 20px 20px 0; }
+    .process-step:not(:first-child) { box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.04); }
 
     .step-num {
       font-family: var(--sans);
@@ -717,7 +729,8 @@
     ═══════════════════════════════════════ */
     .results {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .results-grid {
@@ -729,17 +742,16 @@
 
     .result-card {
       padding: 2rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
       text-align: center;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: box-shadow 0.4s ease;
       cursor: pointer;
     }
 
     .result-card:hover {
-      border-color: var(--accent-dim);
-      box-shadow: 0 4px 24px rgba(98, 54, 244, 0.1);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     .result-num {
@@ -762,7 +774,8 @@
     ═══════════════════════════════════════ */
     .audience {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .audience-grid {
@@ -774,15 +787,15 @@
 
     .audience-card {
       padding: 2.25rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      transition: border-color 0.3s ease, transform 0.35s var(--ease);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.4s ease, transform 0.35s var(--ease);
       cursor: pointer;
     }
 
     .audience-card:hover {
-      border-color: var(--border-bright);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
       transform: translateY(-2px);
     }
 
@@ -828,7 +841,8 @@
     ═══════════════════════════════════════ */
     .framework {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .framework-inner {
@@ -841,9 +855,9 @@
 
     .framework-visual {
       padding: 3rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
       position: relative;
     }
 
@@ -852,14 +866,14 @@
       align-items: center;
       gap: 1rem;
       padding: 1.1rem 1.5rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
       margin-bottom: 0.75rem;
-      transition: border-color 0.3s ease, background 0.3s ease;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
     }
 
     .fw-layer:hover {
-      border-color: var(--accent-dim);
+      box-shadow: 0 0 0 1px rgba(98, 54, 244, 0.2);
       background: var(--accent-glow);
       cursor: pointer;
     }
@@ -953,7 +967,8 @@
     ═══════════════════════════════════════ */
     .testimonials {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .testimonials-grid {
@@ -965,16 +980,16 @@
 
     .testimonial-card {
       padding: 2.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
       position: relative;
-      transition: transform 0.35s var(--ease), border-color 0.3s ease;
+      transition: transform 0.35s var(--ease), box-shadow 0.4s ease;
     }
 
     .testimonial-card:hover {
       transform: translateY(-2px);
-      border-color: var(--border-bright);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
       cursor: pointer;
     }
 
@@ -1030,7 +1045,8 @@
     ═══════════════════════════════════════ */
     .faq {
       padding: 7rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .faq-grid {
@@ -1103,7 +1119,6 @@
     .cta-section {
       padding: 8rem 0;
       background: var(--form-bg);
-      border-top: 1px solid var(--border);
       position: relative;
       overflow: hidden;
     }
@@ -1180,40 +1195,54 @@
     }
 
     .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: var(--form-text);
+      position: relative;
+      margin-bottom: 2rem;
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
-      padding: 0.9rem 1.2rem;
-      background: var(--form-input-bg);
-      border: 1px solid var(--form-input-border);
-      border-radius: 8px;
+      padding: 24px 0 8px;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid var(--form-input-border);
+      border-radius: 0;
       color: var(--form-text);
       font-family: var(--sans);
       font-size: 0.95rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: border-color 0.3s var(--ease);
+    }
+
+    .form-group label {
+      position: absolute;
+      left: 0;
+      top: 24px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--form-placeholder);
+      pointer-events: none;
+      transition: all 0.25s var(--ease);
+    }
+
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label,
+    .form-group textarea:focus ~ label,
+    .form-group textarea:not(:placeholder-shown) ~ label {
+      top: 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
     }
 
     .form-group input::placeholder,
     .form-group textarea::placeholder {
-      color: var(--form-placeholder);
+      color: transparent;
     }
 
     .form-group input:focus,
     .form-group textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(98, 54, 244, 0.25);
     }
 
     .form-group textarea {
@@ -1242,7 +1271,7 @@
     .form-status {
       margin-top: 1.25rem;
       padding: 1rem 1.25rem;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 0.9rem;
       text-align: center;
       line-height: 1.5;
@@ -1265,7 +1294,8 @@
     ═══════════════════════════════════════ */
     .footer {
       padding: 3rem 0;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
     }
 
     .footer .container {
@@ -1381,9 +1411,9 @@
       .audience-grid,
       .process-steps { grid-template-columns: 1fr; }
 
-      .process-step:first-child { border-radius: 16px 16px 0 0; }
-      .process-step:last-child { border-radius: 0 0 16px 16px; }
-      .process-step:not(:first-child) { border-left: 1px solid var(--border); border-top: none; }
+      .process-step:first-child { border-radius: 20px 20px 0 0; }
+      .process-step:last-child { border-radius: 0 0 20px 20px; }
+      .process-step:not(:first-child) { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04); }
 
       .hero-proof {
         flex-direction: column;
@@ -1907,23 +1937,23 @@
         <p>Book a free 30-minute strategy call. I'll map your highest-ROI automation opportunity and give you a concrete plan — whether you hire me or not.</p>
         <form id="leadForm" class="lead-form">
           <div class="form-group">
+            <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" placeholder=" ">
             <label for="name">Your Name *</label>
-            <input type="text" id="name" name="name" required aria-required="true" autocomplete="name">
           </div>
 
           <div class="form-group">
+            <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" placeholder=" ">
             <label for="email">Email Address *</label>
-            <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
           </div>
 
           <div class="form-group">
+            <input type="text" id="company" name="company" autocomplete="organization" placeholder=" ">
             <label for="company">Company (Optional)</label>
-            <input type="text" id="company" name="company" autocomplete="organization">
           </div>
 
           <div class="form-group">
-            <label for="message">What's your biggest operational bottleneck?</label>
-            <textarea id="message" name="message" rows="4" placeholder="e.g., Client onboarding takes 3+ days, leads aren't followed up quickly, too much manual data entry..." aria-describedby="message-hint"></textarea>
+            <textarea id="message" name="message" rows="4" placeholder=" " aria-describedby="message-hint"></textarea>
+            <label for="message">Biggest operational bottleneck?</label>
             <small id="message-hint" class="form-hint">This helps me prepare for our call</small>
           </div>
 
