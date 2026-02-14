@@ -31,15 +31,38 @@ A single-page portfolio website showcasing AI automation services for profession
 
 ```
 pavel.systems/
-├── index.html              # Single-file website
-├── og-image.svg            # Social sharing preview (1200x630)
-├── og-image.html           # Source for PNG capture if needed
-├── netlify.toml            # Netlify deploy config
-├── README.md               # This file
-├── .gitignore              # Git exclusions
+├── index.html              # Main HTML
+├── css/
+│   ├── styles.css          # Main imports
+│   ├── base/
+│   │   ├── variables.css   # CSS custom properties
+│   │   └── reset.css       # Base styles
+│   ├── components/
+│   │   ├── nav.css
+│   │   ├── section-headers.css
+│   │   └── forms.css
+│   └── layout/
+│       ├── hero.css
+│       ├── sections.css
+│       ├── cta.css
+│       ├── footer.css
+│       ├── animations.css
+│       └── responsive.css
+├── js/
+│   ├── main.js             # Module loader
+│   └── modules/
+│       ├── nav.js          # Navigation logic
+│       ├── theme.js        # Theme toggle
+│       ├── animations.js   # GSAP animations
+│       └── form.js         # Form submission
+├── assets/
+│   └── images/
+│       ├── og-image.svg    # Social preview
+│       └── og-image.html   # PNG source
+├── netlify.toml            # Deploy config
 ├── docs/
-│   └── N8N_SETUP_STAGE1.md # n8n Stage 1 setup guide
-└── n8n-workflows/          # (To be created) n8n workflow exports
+│   └── N8N_SETUP_STAGE1.md # n8n setup guide
+└── n8n-workflows/          # (To be created)
     ├── stage-1-basic.json
     ├── stage-2-sheets.json
     ├── stage-3-ai-scoring.json
@@ -72,7 +95,7 @@ open index.html
 
 ### No Build Process Required
 
-This is a static HTML website with no build dependencies. The entire site is contained in `index.html`.
+This is a static HTML website with no build dependencies. Modular architecture with ES6 modules for JS and CSS `@import` for styles.
 
 ## Contact Form Setup
 
@@ -80,13 +103,14 @@ The contact form is currently in development mode. To enable it:
 
 ### Stage 1: Basic Email Notifications
 
-See **[docs/N8N_SETUP_STAGE1.md](docs/N8N_SETUP_STAGE1.md)** for the full walkthrough.
+- **Local n8n:** [docs/N8N_LOCAL_QUICKSTART.md](docs/N8N_LOCAL_QUICKSTART.md) — use with `n8n start`; form is already pointed at `http://localhost:5678/webhook/lead-form`.
+- **Full walkthrough (cloud or local):** [docs/N8N_SETUP_STAGE1.md](docs/N8N_SETUP_STAGE1.md).
 
 **Quick summary:**
-1. Create n8n cloud account at https://cloud.n8n.io
-2. Configure Gmail OAuth2 credential
-3. Create webhook workflow (Webhook -> Set -> Gmail x2)
-4. Replace `YOUR_N8N_WEBHOOK_URL` in `index.html` line ~2543
+1. Run n8n (local: `n8n start` — or create n8n cloud account at https://cloud.n8n.io)
+2. Configure Gmail OAuth2 credential in n8n
+3. Create webhook workflow (Webhook → Set → Gmail x2), path `lead-form`
+4. For production, set the webhook URL in `js/modules/form.js` to your n8n cloud or public URL
 5. Test and deploy
 
 ### Stage 2-4: Advanced Features
@@ -137,7 +161,7 @@ vercel
 
 ### Update Colors
 
-Edit CSS custom properties in `:root` (line 30):
+Edit CSS custom properties in `:root` in `css/styles.css`:
 ```css
 :root {
   --bg: #0b0b0b;              /* Background */
@@ -155,7 +179,7 @@ Plausible is already included. To disable, remove the script from `index.html`.
 
 ### og-image (Social Previews)
 
-`og-image.svg` is used for link previews. Some platforms (Twitter, LinkedIn) prefer PNG—if previews fail, screenshot `og-image.html` at 1200×630, save as `og-image.png`, and update the `og:image` and `twitter:image` meta tags to point to it.
+`assets/images/og-image.svg` is used for link previews. Some platforms (Twitter, LinkedIn) prefer PNG—if previews fail, screenshot `assets/images/og-image.html` at 1200×630, save as `og-image.png` in the same folder, and update the meta tags to point to it.
 
 ## Testing
 

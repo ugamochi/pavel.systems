@@ -1,0 +1,94 @@
+/* ═══════════════════════════════════════
+   CTA SECTION
+═══════════════════════════════════════ */
+.cta-section {
+  padding: 8rem 0;
+  background: var(--form-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-glow {
+  position: absolute;
+  bottom: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse, var(--faq-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+  max-width: 100%;
+}
+
+.cta-text {
+  padding-top: 1rem;
+}
+
+.cta-content h2 {
+  font-family: var(--sans);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  color: var(--form-text);
+}
+
+.cta-content h2 em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.cta-content p {
+  font-size: 1.05rem;
+  color: var(--form-text-muted);
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+
+.cta-note {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--form-divider);
+  font-size: 0.78rem;
+  color: var(--form-text-muted);
+  line-height: 1.6;
+}
+
+.cta-section .section-label {
+  color: var(--form-text-muted);
+}
+
+.cta-section .section-label::before {
+  background: var(--accent);
+}
+
+.cta-section .btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.cta-section .btn-primary:hover {
+  box-shadow: 0 8px 32px rgba(98, 54, 244, 0.35);
+}
+
+.cta-section .form-status.success {
+  background: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.3);
+  color: #15803d;
+}
+
+.cta-section .form-status.error {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+}
+

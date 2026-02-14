@@ -288,10 +288,10 @@ Your webhook URL should look like:
 https://yourinstance.app.n8n.cloud/webhook/lead-form
 ```
 
-### 5.2 Update index.html
+### 5.2 Update Webhook URL
 
-1. Open `index.html` in your editor
-2. Find line ~2543: `const webhookUrl = 'YOUR_N8N_WEBHOOK_URL';`
+1. Open `js/main.js` in your editor
+2. In `js/main.js`, find line ~350: `const webhookUrl = 'YOUR_N8N_WEBHOOK_URL';`
 3. Replace with your actual webhook URL:
 
 ```javascript
@@ -324,7 +324,7 @@ const webhookUrl = 'https://yourinstance.app.n8n.cloud/webhook/lead-form';
 ### 6.1 Commit Changes
 
 ```bash
-git add index.html
+git add js/main.js
 git commit -m "feat: Connect contact form to n8n webhook
 
 Stage 1 implementation complete:
@@ -370,7 +370,7 @@ vercel --prod
 ### Form submission fails
 
 **Error: "Submission failed. Please email me directly..."**
-- Check webhook URL is correct in `index.html`
+- Check webhook URL is correct in `js/main.js`
 - Verify n8n workflow is **Active** (green toggle)
 - Check browser console for CORS errors
 - Test webhook URL directly with curl
