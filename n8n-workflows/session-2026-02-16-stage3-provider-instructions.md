@@ -35,6 +35,14 @@ This file captures final operating rules discovered while hardening Stage 3 and 
    - Wrong assumption: Render-hosted n8n can reach laptop `localhost`.
    - Right: use a public/reachable endpoint (provider API or tunnel).
 
+5. OpenRouter routed free models rejected developer/system instruction.
+   - Wrong: split prompt into `system` + `user` messages for all providers.
+   - Right: use a single `user` prompt payload for maximum compatibility.
+
+6. Spam-like leads were incorrectly scored as hot.
+   - Wrong: AI-only scoring with weak pattern checks.
+   - Right: deterministic spam override + fallback rules in `create scored fields`.
+
 ## Provider Rules
 
 ### Rule 1: OpenAI-compatible endpoint only
@@ -105,4 +113,8 @@ Pass criteria:
 
 1. `429` may come from provider limits OR unstable tunnel service.
 2. `continueOnFail` keeps workflow green while scoring fails; always inspect `verify-stage-3.sh`.
-3. If scores look unrealistic (spam marked hot), tighten system prompt/rules in `stage-3-scoring.json`.
+3. If score node errors but lead fields still populate, check `aiScoringStatus`:
+   - `ok` = AI response parsed successfully
+   - `ok_spam_override` = deterministic spam rules forced score/priority
+   - `ok_fallback_rules` = non-spam fallback used when AI output was missing/invalid
+4. If scores look unrealistic (spam marked hot), tighten spam signals in `create scored fields`.

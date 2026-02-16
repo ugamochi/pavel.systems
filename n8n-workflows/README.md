@@ -134,8 +134,14 @@ Notes:
   - `score lead with ai` (HTTP request to OpenAI)
   - `create scored fields` (parses score/priority/reason and preserves lead fields)
 - AI branch uses `continueOnFail` so mail flow still runs if scoring fails.
+- `create scored fields` applies deterministic spam guardrails:
+  - promo/spam signals force `leadPriority=cold`, `leadScore=5`
+  - status is set to `ok_spam_override`
+- If provider response is missing/invalid for non-spam leads, a rule fallback is applied:
+  - status is set to `ok_fallback_rules`
+  - fallback scoring uses intent keywords so fields are never blank
 - Add these columns in your target sheet to store Stage 3 output:
-  - `leadScore`, `leadPriority`, `leadScoreReason`, `aiScoringStatus`, `aiScoringError`
+  - `leadScore`, `leadPriority`, `leadScoreReason`, `spamFlag`, `spamSignals`, `aiScoringStatus`, `aiScoringError`
 
 ### Use Another API (OpenAI-compatible)
 
@@ -158,6 +164,11 @@ OPENAI_MODEL=openrouter/free
 OPENAI_API_URL=https://openrouter.ai/api/v1/chat/completions
 LLM_AUTH_MODE=bearer
 ```
+
+Compatibility note:
+
+- Some routed free models reject `system` messages with errors like `Developer instruction is not enabled ...`.
+- `stage-3-scoring.json` now sends a single `user` instruction for better provider compatibility.
 
 For providers that do not need bearer auth (for example a private Ollama endpoint):
 

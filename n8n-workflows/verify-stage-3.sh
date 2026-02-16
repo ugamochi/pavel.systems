@@ -81,6 +81,8 @@ jq -r '
   "leadScore: " + (($j.leadScore // "<missing>")|tostring),
   "leadPriority: " + (($j.leadPriority // "<missing>")|tostring),
   "leadScoreReason: " + (($j.leadScoreReason // "<missing>")|tostring),
+  "spamFlag: " + (($j.spamFlag // "<missing>")|tostring),
+  "spamSignals: " + (($j.spamSignals // "<missing>")|tostring),
   "aiScoringStatus: " + (($j.aiScoringStatus // "<missing>")|tostring),
   "aiScoringError: " + (($j.aiScoringError // "<missing>")|tostring)
 ' "$EXEC_JSON"
