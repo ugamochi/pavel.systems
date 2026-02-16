@@ -141,7 +141,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\"model\":\"__OPENAI_MODEL__\",\"temperature\":0.2,\"response_format\":{\"type\":\"json_object\"},\"messages\":[{\"role\":\"system\",\"content\":\"You score B2B inbound leads. Return strict JSON with keys: score (0-100 integer), priority (hot|warm|cold), reason (max 25 words).\"},{\"role\":\"user\",\"content\":\"Name: {{ $('create fields').item.json.name }} | Email: {{ $('create fields').item.json.email }} | Company: {{ $('create fields').item.json.company }} | Message: {{ $('create fields').item.json.message }} | Source: {{ $('create fields').item.json.source }}\"}]}",
+        "jsonBody": "={{ {\"model\":\"__OPENAI_MODEL__\",\"temperature\":0.2,\"response_format\":{\"type\":\"json_object\"},\"messages\":[{\"role\":\"system\",\"content\":\"You score B2B inbound leads. Return strict JSON with keys: score (0-100 integer), priority (hot|warm|cold), reason (max 25 words).\"},{\"role\":\"user\",\"content\":\"Name: \" + ($('create fields').item.json.name || \"\") + \" | Email: \" + ($('create fields').item.json.email || \"\") + \" | Company: \" + ($('create fields').item.json.company || \"\") + \" | Message: \" + ($('create fields').item.json.message || \"\") + \" | Source: \" + ($('create fields').item.json.source || \"\")}] } }}",
         "options": {
           "timeout": 15000
         }
