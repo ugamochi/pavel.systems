@@ -91,11 +91,30 @@ echo "Execution ID: $LATEST_ID"
 jq -r '"Status: " + (.status|tostring), "Finished: " + (.finished|tostring), "Workflow ID: " + (.workflowId|tostring)' "$EXEC_JSON"
 
 echo ""
+echo "Security Fields"
+jq -r '
+  (.data.resultData.runData["security guardrails"][0].data.main[0][0].json // {}) as $j |
+  "securityAction: " + (($j.securityAction // "<missing>")|tostring),
+  "securityBlocked: " + ((if ($j | has("securityBlocked")) then ($j.securityBlocked|tostring) else "<missing>" end)|tostring),
+  "securityRiskScore: " + (($j.securityRiskScore // "<missing>")|tostring),
+  "securityReason: " + (($j.securityReason // "<missing>")|tostring),
+  "clientIp: " + (($j.clientIp // "<missing>")|tostring)
+' "$EXEC_JSON"
+
+echo ""
 echo "Score Node"
 jq -r '
-  .data.resultData.runData["score lead with ai"][0] as $r |
-  "Execution status: " + (($r.executionStatus // "<missing>")|tostring),
-  "Node error: " + (($r.error.message // $r.data.main[0][0].error.message // $r.data.main[0][0].json.error // "<none>")|tostring)
+  (.data.resultData.runData["score lead with ai"][0] // null) as $r |
+  "Execution status: " + ((if $r == null then "<skipped>" else ($r.executionStatus // "<missing>") end)|tostring),
+  "Node error: " + ((if $r == null then "<none>" else ($r.error.message // $r.data.main[0][0].error.message // $r.data.main[0][0].json.error // "<none>") end)|tostring)
+' "$EXEC_JSON"
+
+echo ""
+echo "Owner Email Node"
+jq -r '
+  (.data.resultData.runData["send message to me"][0] // null) as $r |
+  "Execution status: " + ((if $r == null then "<skipped>" else ($r.executionStatus // "<missing>") end)|tostring),
+  "Node error: " + ((if $r == null then "<none>" else ($r.error.message // $r.data.main[0][0].error.message // $r.data.main[0][0].json.error // "<none>") end)|tostring)
 ' "$EXEC_JSON"
 
 echo ""

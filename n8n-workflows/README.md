@@ -218,6 +218,11 @@ bash n8n-workflows/verify-stage-4.sh
 Notes:
 
 - Stage 4 adds `create response fields` node after scoring.
+- Stage 4 now includes a pre-scoring security layer:
+  - `security guardrails` sanitizes/normalizes payload fields
+  - blocks malformed/bot-like submissions (`securityAction=block`)
+  - flags suspicious submissions (`securityAction=quarantine`)
+  - blocked leads skip owner email, AI scoring, and client reply
 - Client email subject/body are now personalized from:
   - `responseStrategy` (`hot`, `warm`, `cold`, `spam`)
   - `responseSubject`
@@ -232,3 +237,4 @@ Notes:
 - Optional hot lead alert routing:
   - If `HOT_ALERT_WEBHOOK_URL` is set and lead is `hot`, n8n posts lead summary JSON to that webhook.
 - Response metadata is appended and can be logged to Sheets if matching columns exist.
+- `verify-stage-4.sh` now prints security fields (`securityAction`, `securityReason`, `securityRiskScore`, `clientIp`) plus node-level skip/success states.

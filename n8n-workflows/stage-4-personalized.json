@@ -52,7 +52,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\"name\": \"{{ $json.body && $json.body.name ? $json.body.name : ($json.name || '') }}\", \"email\": \"{{ $json.body && $json.body.email ? $json.body.email : ($json.email || '') }}\", \"company\": \"{{ $json.body && $json.body.company ? $json.body.company : ($json.company || '') }}\", \"message\": \"{{ $json.body && $json.body.message ? $json.body.message : ($json.message || '') }}\", \"timestamp\": \"{{ $json.body && $json.body.timestamp ? $json.body.timestamp : ($json.timestamp || '') }}\", \"source\": \"{{ $json.body && $json.body.source ? $json.body.source : ($json.source || '') }}\", \"userAgent\": \"{{ $json.body && $json.body.userAgent ? $json.body.userAgent : ($json.userAgent || '') }}\", \"referrer\": \"{{ $json.body && $json.body.referrer ? $json.body.referrer : ($json.referrer || '') }}\"}",
+        "jsonOutput": "={\n  \"name\": \"{{ $json.body && $json.body.name ? $json.body.name : ($json.name || '') }}\",\n  \"email\": \"{{ $json.body && $json.body.email ? $json.body.email : ($json.email || '') }}\",\n  \"company\": \"{{ $json.body && $json.body.company ? $json.body.company : ($json.company || '') }}\",\n  \"message\": \"{{ $json.body && $json.body.message ? $json.body.message : ($json.message || '') }}\",\n  \"timestamp\": \"{{ $json.body && $json.body.timestamp ? $json.body.timestamp : ($json.timestamp || '') }}\",\n  \"source\": \"{{ $json.body && $json.body.source ? $json.body.source : ($json.source || '') }}\",\n  \"userAgent\": \"{{ $json.body && $json.body.userAgent ? $json.body.userAgent : ($json.userAgent || '') }}\",\n  \"referrer\": \"{{ $json.body && $json.body.referrer ? $json.body.referrer : ($json.referrer || '') }}\",\n  \"website\": \"{{ $json.body && $json.body.website ? $json.body.website : ($json.website || '') }}\",\n  \"clientIp\": \"{{ $json.headers && $json.headers['x-forwarded-for'] ? $json.headers['x-forwarded-for'] : ($json.headers && $json.headers['x-real-ip'] ? $json.headers['x-real-ip'] : '') }}\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -143,7 +143,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ {\n  \"model\":\"__OPENAI_MODEL__\",\n  \"temperature\":0.2,\n  \"response_format\":{\"type\":\"json_object\"},\n  \"messages\":[\n    {\n      \"role\":\"user\",\n      \"content\":\n        \"Score this inbound B2B lead. Return strict JSON only with keys: score (0-100 integer), priority (hot|warm|cold), reason (max 25 words). \" +\n        \"Lead data -> Name: \" + ($('create fields').item.json.name || \"\") +\n        \" | Email: \" + ($('create fields').item.json.email || \"\") +\n        \" | Company: \" + ($('create fields').item.json.company || \"\") +\n        \" | Message: \" + ($('create fields').item.json.message || \"\") +\n        \" | Source: \" + ($('create fields').item.json.source || \"\")\n    }\n  ]\n} }}",
+        "jsonBody": "={{ {\n  \"model\":\"__OPENAI_MODEL__\",\n  \"temperature\":0.2,\n  \"response_format\":{\"type\":\"json_object\"},\n  \"messages\":[\n    {\n      \"role\":\"user\",\n      \"content\":\n        \"Score this inbound B2B lead. Return strict JSON only with keys: score (0-100 integer), priority (hot|warm|cold), reason (max 25 words). \" +\n        \"Lead data -> Name: \" + ($('security guardrails').item.json.name || \"\") +\n        \" | Email: \" + ($('security guardrails').item.json.email || \"\") +\n        \" | Company: \" + ($('security guardrails').item.json.company || \"\") +\n        \" | Message: \" + ($('security guardrails').item.json.message || \"\") +\n        \" | Source: \" + ($('security guardrails').item.json.source || \"\")\n    }\n  ]\n} }}",
         "options": {
           "timeout": 15000
         }
@@ -162,7 +162,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={{ (() => {\n  const lead = $('create fields').item.json || {};\n  const message = (lead.message || '').toString();\n  const messageLower = message.toLowerCase();\n  const emailLower = (lead.email || '').toString().toLowerCase();\n\n  const keywordSignals = [\n    'private label rights',\n    'business in a box',\n    'done-for-you',\n    'done for you',\n    'passive income',\n    'keep 100% of the profits',\n    'affiliate campaign',\n    'resell rights',\n    'plr',\n    'autopilot business',\n    'book ninja',\n    'exit traffic network',\n    'guaranteed income',\n    '100% profit'\n  ];\n\n  let spamSignals = 0;\n  const matchedSignals = [];\n\n  for (const token of keywordSignals) {\n    if (messageLower.includes(token)) {\n      spamSignals += 1;\n      matchedSignals.push(token);\n    }\n  }\n\n  if (/(https?:\\/\\/|www\\.)/i.test(message)) {\n    spamSignals += 2;\n    matchedSignals.push('external_link');\n  }\n\n  if (/(youtube\\.com|youtu\\.be|bit\\.ly|tinyurl\\.com|t\\.me)/i.test(message)) {\n    spamSignals += 2;\n    matchedSignals.push('tracking_or_short_link');\n  }\n\n  if (message.length > 450) {\n    spamSignals += 1;\n    matchedSignals.push('long_marketing_copy');\n  }\n\n  if (/(no-?reply|mailer-daemon|donotreply)/i.test(emailLower)) {\n    spamSignals += 2;\n    matchedSignals.push('suspicious_sender');\n  }\n\n  const hardSpamPattern = /(private label rights|business in a box|keep 100% of the profits|done[- ]for[- ]you|passive income|resell rights)/i;\n  const isSpam = spamSignals >= 4 || hardSpamPattern.test(messageLower);\n\n  let aiParsed = {};\n  try {\n    const content = ($json.choices && $json.choices[0] && $json.choices[0].message)\n      ? $json.choices[0].message.content\n      : '';\n    aiParsed = typeof content === 'string' ? JSON.parse(content) : (content || {});\n  } catch (e) {\n    aiParsed = {};\n  }\n\n  const aiScoreRaw = aiParsed && aiParsed.score !== undefined ? aiParsed.score : '';\n  const aiPriorityRaw = aiParsed && aiParsed.priority ? aiParsed.priority : '';\n  const aiReasonRaw = aiParsed && aiParsed.reason ? aiParsed.reason : '';\n\n  const aiScoreNumber = Number(aiScoreRaw);\n  const aiHasScore = Number.isFinite(aiScoreNumber);\n  const aiPriority = (aiPriorityRaw || '').toString().toLowerCase();\n  const aiHasPriority = ['hot', 'warm', 'cold'].includes(aiPriority);\n  const aiHasReason = !!(aiReasonRaw || '').toString().trim();\n\n  const intentPattern = /(quote|proposal|budget|timeline|book|call|meeting|discovery|need help|automation|integrat|crm|project|hire|support)/i;\n  const hasIntent = intentPattern.test(messageLower);\n\n  const fallbackScore = hasIntent ? 72 : 35;\n  const fallbackPriority = hasIntent ? 'warm' : 'cold';\n  const fallbackReason = hasIntent\n    ? 'Rule fallback: clear business intent and concrete service request.'\n    : 'Rule fallback: low intent or incomplete inquiry.';\n\n  const useFallback = !isSpam && (!aiHasScore || !aiHasPriority || !aiHasReason);\n\n  const leadScore = isSpam ? 5 : (useFallback ? fallbackScore : aiScoreNumber);\n  const leadPriority = isSpam ? 'cold' : (useFallback ? fallbackPriority : aiPriority);\n  const leadScoreReason = isSpam\n    ? ('Spam override triggered: ' + (matchedSignals.slice(0, 4).join(', ') || 'promo pattern'))\n    : (useFallback ? fallbackReason : aiReasonRaw);\n\n  let aiError = '';\n  try {\n    if ($json.error) {\n      aiError = typeof $json.error === 'string'\n        ? $json.error\n        : ($json.error.message || '');\n    }\n  } catch (e) {\n    aiError = '';\n  }\n\n  let aiScoringStatus = 'ok';\n  if (isSpam) {\n    aiScoringStatus = 'ok_spam_override';\n  } else if (useFallback) {\n    aiScoringStatus = 'ok_fallback_rules';\n  } else if ($json.error) {\n    aiScoringStatus = 'error';\n  }\n\n  return {\n    name: lead.name || '',\n    email: lead.email || '',\n    company: lead.company || '',\n    message: lead.message || '',\n    timestamp: lead.timestamp || '',\n    source: lead.source || '',\n    userAgent: lead.userAgent || '',\n    referrer: lead.referrer || '',\n    leadScore,\n    leadPriority,\n    leadScoreReason,\n    spamFlag: isSpam ? 'true' : 'false',\n    spamSignals,\n    aiScoringStatus,\n    aiScoringError: aiError\n  };\n})() }}",
+        "jsonOutput": "={{ (() => {\n  const lead = $('security guardrails').item.json || {};\n  const message = (lead.message || '').toString();\n  const messageLower = message.toLowerCase();\n  const emailLower = (lead.email || '').toString().toLowerCase();\n\n  const keywordSignals = [\n    'private label rights',\n    'business in a box',\n    'done-for-you',\n    'done for you',\n    'passive income',\n    'keep 100% of the profits',\n    'affiliate campaign',\n    'resell rights',\n    'plr',\n    'autopilot business',\n    'book ninja',\n    'exit traffic network',\n    'guaranteed income',\n    '100% profit'\n  ];\n\n  let spamSignals = 0;\n  const matchedSignals = [];\n\n  for (const token of keywordSignals) {\n    if (messageLower.includes(token)) {\n      spamSignals += 1;\n      matchedSignals.push(token);\n    }\n  }\n\n  if (/(https?:\\/\\/|www\\.)/i.test(message)) {\n    spamSignals += 2;\n    matchedSignals.push('external_link');\n  }\n\n  if (/(youtube\\.com|youtu\\.be|bit\\.ly|tinyurl\\.com|t\\.me)/i.test(message)) {\n    spamSignals += 2;\n    matchedSignals.push('tracking_or_short_link');\n  }\n\n  if (message.length > 450) {\n    spamSignals += 1;\n    matchedSignals.push('long_marketing_copy');\n  }\n\n  if (/(no-?reply|mailer-daemon|donotreply)/i.test(emailLower)) {\n    spamSignals += 2;\n    matchedSignals.push('suspicious_sender');\n  }\n\n  const hardSpamPattern = /(private label rights|business in a box|keep 100% of the profits|done[- ]for[- ]you|passive income|resell rights)/i;\n  const isSpam = spamSignals >= 4 || hardSpamPattern.test(messageLower);\n\n  let aiParsed = {};\n  try {\n    const content = ($json.choices && $json.choices[0] && $json.choices[0].message)\n      ? $json.choices[0].message.content\n      : '';\n    aiParsed = typeof content === 'string' ? JSON.parse(content) : (content || {});\n  } catch (e) {\n    aiParsed = {};\n  }\n\n  const aiScoreRaw = aiParsed && aiParsed.score !== undefined ? aiParsed.score : '';\n  const aiPriorityRaw = aiParsed && aiParsed.priority ? aiParsed.priority : '';\n  const aiReasonRaw = aiParsed && aiParsed.reason ? aiParsed.reason : '';\n\n  const aiScoreNumber = Number(aiScoreRaw);\n  const aiHasScore = Number.isFinite(aiScoreNumber);\n  const aiPriority = (aiPriorityRaw || '').toString().toLowerCase();\n  const aiHasPriority = ['hot', 'warm', 'cold'].includes(aiPriority);\n  const aiHasReason = !!(aiReasonRaw || '').toString().trim();\n\n  const intentPattern = /(quote|proposal|budget|timeline|book|call|meeting|discovery|need help|automation|integrat|crm|project|hire|support)/i;\n  const hasIntent = intentPattern.test(messageLower);\n\n  const fallbackScore = hasIntent ? 72 : 35;\n  const fallbackPriority = hasIntent ? 'warm' : 'cold';\n  const fallbackReason = hasIntent\n    ? 'Rule fallback: clear business intent and concrete service request.'\n    : 'Rule fallback: low intent or incomplete inquiry.';\n\n  const useFallback = !isSpam && (!aiHasScore || !aiHasPriority || !aiHasReason);\n\n  const leadScore = isSpam ? 5 : (useFallback ? fallbackScore : aiScoreNumber);\n  const leadPriority = isSpam ? 'cold' : (useFallback ? fallbackPriority : aiPriority);\n  const leadScoreReason = isSpam\n    ? ('Spam override triggered: ' + (matchedSignals.slice(0, 4).join(', ') || 'promo pattern'))\n    : (useFallback ? fallbackReason : aiReasonRaw);\n\n  let aiError = '';\n  try {\n    if ($json.error) {\n      aiError = typeof $json.error === 'string'\n        ? $json.error\n        : ($json.error.message || '');\n    }\n  } catch (e) {\n    aiError = '';\n  }\n\n  let aiScoringStatus = 'ok';\n  if (isSpam) {\n    aiScoringStatus = 'ok_spam_override';\n  } else if (useFallback) {\n    aiScoringStatus = 'ok_fallback_rules';\n  } else if ($json.error) {\n    aiScoringStatus = 'error';\n  }\n\n  return {\n    name: lead.name || '',\n    email: lead.email || '',\n    company: lead.company || '',\n    message: lead.message || '',\n    timestamp: lead.timestamp || '',\n    source: lead.source || '',\n    userAgent: lead.userAgent || '',\n    referrer: lead.referrer || '',\n    clientIp: lead.clientIp || '',\n    securityBlocked: lead.securityBlocked || false,\n    securityAction: lead.securityAction || 'allow',\n    securityRiskScore: lead.securityRiskScore !== undefined ? lead.securityRiskScore : 100,\n    securityReason: lead.securityReason || '',\n    leadScore,\n    leadPriority,\n    leadScoreReason,\n    spamFlag: isSpam ? 'true' : 'false',\n    spamSignals,\n    aiScoringStatus,\n    aiScoringError: aiError\n  };\n})() }}",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -294,6 +294,54 @@
       "name": "send hot lead alert webhook",
       "alwaysOutputData": true,
       "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => {\n  const lead = $('create fields').item.json || {};\n\n  const clean = (value, max = 200) => (value || '')\n    .toString()\n    .replace(/[\\u0000-\\u001F\\u007F]/g, ' ')\n    .replace(/<[^>]*>/g, '')\n    .replace(/\\s+/g, ' ')\n    .trim()\n    .slice(0, max);\n\n  const cleanMessage = (value, max = 2500) => (value || '')\n    .toString()\n    .replace(/[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, ' ')\n    .replace(/<script\\b[^<]*(?:(?!<\\/script>)<[^<]*)*<\\/script>/gi, '')\n    .trim()\n    .slice(0, max);\n\n  const name = clean(lead.name, 120);\n  const email = clean(lead.email, 180).toLowerCase();\n  const company = clean(lead.company, 160);\n  const message = cleanMessage(lead.message, 2500);\n  const timestamp = clean(lead.timestamp, 60);\n  const source = clean(lead.source, 120);\n  const userAgent = clean(lead.userAgent, 400);\n  const referrer = clean(lead.referrer, 300);\n  const website = clean(lead.website, 200);\n  const clientIp = clean(lead.clientIp, 120);\n\n  const allowedSources = new Set([\n    'pavel.systems',\n    'www.pavel.systems',\n    'ugamochi.github.io/pavel.systems',\n    'codex-cli',\n    'codex-cli-test'\n  ]);\n\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  const requiredMissing = !name || !email || !message;\n  const emailInvalid = !emailRegex.test(email);\n  const honeypotTriggered = !!website;\n  const messageTooShort = message.length < 10;\n  const messageTooLong = message.length > 2400;\n  const scriptPattern = /javascript:|<script|onerror=|onload=/i.test((lead.message || '').toString());\n  const urlCount = ((message.match(/https?:\\/\\//gi) || []).length + (message.match(/www\\./gi) || []).length);\n  const tooManyUrls = urlCount > 4;\n\n  let timestampStale = false;\n  if (timestamp) {\n    const ts = Date.parse(timestamp);\n    if (!Number.isNaN(ts)) {\n      const ageMs = Math.abs(Date.now() - ts);\n      if (ageMs > 1000 * 60 * 60 * 24 * 14) timestampStale = true;\n    }\n  }\n\n  const sourceUntrusted = !!source && !allowedSources.has(source);\n\n  const blockReasons = [];\n  if (requiredMissing) blockReasons.push('missing_required_fields');\n  if (emailInvalid) blockReasons.push('invalid_email');\n  if (honeypotTriggered) blockReasons.push('honeypot_triggered');\n  if (scriptPattern) blockReasons.push('script_payload_detected');\n  if (messageTooShort) blockReasons.push('message_too_short');\n  if (messageTooLong) blockReasons.push('message_too_long');\n\n  const suspiciousReasons = [];\n  if (tooManyUrls) suspiciousReasons.push('too_many_urls');\n  if (timestampStale) suspiciousReasons.push('stale_timestamp');\n  if (sourceUntrusted) suspiciousReasons.push('untrusted_source');\n\n  const securityBlocked = blockReasons.length > 0;\n  const securityAction = securityBlocked ? 'block' : (suspiciousReasons.length > 0 ? 'quarantine' : 'allow');\n\n  let securityRiskScore = 100;\n  securityRiskScore -= blockReasons.length * 30;\n  securityRiskScore -= suspiciousReasons.length * 12;\n  if (securityRiskScore < 0) securityRiskScore = 0;\n\n  return {\n    name,\n    email,\n    company,\n    message,\n    timestamp,\n    source,\n    userAgent,\n    referrer,\n    website,\n    clientIp,\n    securityBlocked,\n    securityAction,\n    securityRiskScore,\n    securityBlockReasons: blockReasons.join(','),\n    securitySuspiciousReasons: suspiciousReasons.join(','),\n    securityReason: [...blockReasons, ...suspiciousReasons].join(',')\n  };\n})() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        -120
+      ],
+      "id": "f5c6777f-1ad4-4217-8ff2-9a4cf6267c3a",
+      "name": "security guardrails"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6113fcb9-57e8-49e5-a0d4-767e5410c81e",
+              "leftValue": "={{ $json.securityAction }}",
+              "rightValue": "block",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        -120
+      ],
+      "id": "6e297760-2909-46f0-b6f2-f2353b9cbf40",
+      "name": "route secure lead"
     }
   ],
   "connections": {
@@ -306,12 +354,7 @@
       "main": [
         [
           {
-            "node": "send message to me",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "score lead with ai",
+            "node": "security guardrails",
             "type": "main",
             "index": 0
           }
@@ -394,6 +437,40 @@
           }
         ],
         []
+      ]
+    },
+    "security guardrails": {
+      "main": [
+        [
+          {
+            "node": "route secure lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "route secure lead": {
+      "main": [
+        [
+          {
+            "node": "send message to me",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "score lead with ai",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "log lead to sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
