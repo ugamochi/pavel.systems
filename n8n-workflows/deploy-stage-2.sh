@@ -3,7 +3,7 @@ set -euo pipefail
 
 BASE_URL="${N8N_BASE_URL:-https://n8n-service-uwaf.onrender.com}"
 API_KEY="${N8N_API_KEY:-}"
-WORKFLOW_FILE="${1:-n8n-workflows/stage-1-basic.json}"
+WORKFLOW_FILE="${1:-n8n-workflows/stage-2-sheets.json}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOADED_ENV_FILES=()
 
@@ -50,6 +50,10 @@ fi
 
 API_KEY="${N8N_API_KEY:-$API_KEY}"
 BASE_URL="${N8N_BASE_URL:-$BASE_URL}"
+GSHEET_DOCUMENT_ID="${GSHEET_DOCUMENT_ID:-}"
+GSHEET_SHEET_NAME="${GSHEET_SHEET_NAME:-}"
+GSHEET_CREDENTIAL_ID="${GSHEET_CREDENTIAL_ID:-}"
+GSHEET_CREDENTIAL_NAME="${GSHEET_CREDENTIAL_NAME:-}"
 
 if [[ -z "$API_KEY" ]]; then
   echo "Error: N8N_API_KEY is required." >&2
@@ -58,6 +62,32 @@ if [[ -z "$API_KEY" ]]; then
     printf '  - %s\n' "${LOADED_ENV_FILES[@]}" >&2
   fi
   echo "Set it with: export N8N_API_KEY='...'" >&2
+  exit 1
+fi
+
+if [[ -z "$GSHEET_DOCUMENT_ID" || -z "$GSHEET_SHEET_NAME" || -z "$GSHEET_CREDENTIAL_NAME" ]]; then
+  echo "Error: GSHEET_DOCUMENT_ID, GSHEET_SHEET_NAME, and GSHEET_CREDENTIAL_NAME are required for Stage 2." >&2
+  echo "Set them in n8n-workflows/.env, for example:" >&2
+  echo "  GSHEET_DOCUMENT_ID=1abcDEF..." >&2
+  echo "  GSHEET_SHEET_NAME=Leads" >&2
+  echo "  GSHEET_CREDENTIAL_NAME=Google Sheets account" >&2
+  exit 1
+fi
+
+if [[ -z "$GSHEET_CREDENTIAL_ID" || "$GSHEET_CREDENTIAL_ID" == "..." || "$GSHEET_CREDENTIAL_ID" == "{" ]]; then
+  cat >&2 <<'EOF'
+Error: GSHEET_CREDENTIAL_ID is required for API deploy of Stage 2.
+
+Why: n8n workflow API requires a credential ID in the node credentials object.
+Without it, runs appear successful but the Google Sheets node returns:
+  Found credential with no ID.
+
+How to get it in n8n UI:
+1) Open n8n -> Credentials
+2) Click your Google Sheets credential
+3) Copy the ID from URL .../credentials/<ID>
+4) Set GSHEET_CREDENTIAL_ID=<ID> in n8n-workflows/.env
+EOF
   exit 1
 fi
 
@@ -73,9 +103,27 @@ fi
 
 AUTH_HEADER=("X-N8N-API-KEY: $API_KEY")
 JSON_HEADER=("Content-Type: application/json")
+
 WORKFLOW_NAME="$(jq -r '.name' "$WORKFLOW_FILE")"
-# n8n API v1 on this instance rejects some exported settings keys.
-PAYLOAD="$(jq -c '{name, nodes, connections, settings: {executionOrder: (.settings.executionOrder // "v1")}}' "$WORKFLOW_FILE")"
+PAYLOAD="$(
+  jq -c \
+    --arg doc "$GSHEET_DOCUMENT_ID" \
+    --arg sheet "$GSHEET_SHEET_NAME" \
+    --arg cred_id "$GSHEET_CREDENTIAL_ID" \
+    --arg cred_name "$GSHEET_CREDENTIAL_NAME" '
+      .nodes |= map(
+        if .name=="log lead to sheets" then
+          .parameters.documentId.value = $doc
+          | .parameters.sheetName.value = $sheet
+          | .credentials.googleSheetsOAuth2Api.id = $cred_id
+          | .credentials.googleSheetsOAuth2Api.name = $cred_name
+        else
+          .
+        end
+      )
+      | {name, nodes, connections, settings: {executionOrder: (.settings.executionOrder // "v1")}}
+    ' "$WORKFLOW_FILE"
+)"
 
 echo "Checking API access at $BASE_URL ..."
 LIST_RESPONSE="$(
@@ -143,3 +191,7 @@ echo "Deployment complete."
 echo "Workflow: $WORKFLOW_NAME"
 echo "ID: $WORKFLOW_ID"
 echo "Version: $VERSION_ID"
+echo "Sheets Document ID: $GSHEET_DOCUMENT_ID"
+echo "Sheets Tab Name: $GSHEET_SHEET_NAME"
+echo "Sheets Credential ID: <set>"
+echo "Sheets Credential Name: $GSHEET_CREDENTIAL_NAME"
