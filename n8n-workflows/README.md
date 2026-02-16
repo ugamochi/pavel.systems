@@ -104,9 +104,10 @@ Notes:
    - `GSHEET_CREDENTIAL_ID`
    - `GSHEET_CREDENTIAL_NAME`
 2. Add OpenAI variables to `n8n-workflows/.env`:
-   - `OPENAI_API_KEY` (required)
+   - `OPENAI_API_KEY` (required when `LLM_AUTH_MODE=bearer`)
    - `OPENAI_MODEL` (optional, default `gpt-4o-mini`)
    - `OPENAI_API_URL` (optional, default `https://api.openai.com/v1/chat/completions`)
+   - `LLM_AUTH_MODE` (optional, `bearer` or `none`, default `bearer`)
 3. Deploy Stage 3:
 
 ```bash
@@ -133,3 +134,30 @@ Notes:
 - AI branch uses `continueOnFail` so mail flow still runs if scoring fails.
 - Add these columns in your target sheet to store Stage 3 output:
   - `leadScore`, `leadPriority`, `leadScoreReason`, `aiScoringStatus`, `aiScoringError`
+
+### Use Another API (OpenAI-compatible)
+
+You can use any OpenAI-compatible endpoint (including open-source model providers).
+
+Example config:
+
+```dotenv
+OPENAI_MODEL=your-provider-model-id
+OPENAI_API_URL=https://your-provider.example.com/v1/chat/completions
+OPENAI_API_KEY=your_provider_key
+LLM_AUTH_MODE=bearer
+```
+
+For providers that do not need bearer auth (for example a private Ollama endpoint):
+
+```dotenv
+OPENAI_MODEL=qwen2.5:7b
+OPENAI_API_URL=http://your-ollama-host:11434/v1/chat/completions
+OPENAI_API_KEY=
+LLM_AUTH_MODE=none
+```
+
+Important:
+
+- Your n8n server (Render) must be able to reach `OPENAI_API_URL`.
+- `localhost` on your laptop is not reachable from Render.

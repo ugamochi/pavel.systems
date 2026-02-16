@@ -53,6 +53,7 @@ GSHEET_CREDENTIAL_NAME="${GSHEET_CREDENTIAL_NAME:-}"
 OPENAI_API_KEY="${OPENAI_API_KEY:-}"
 OPENAI_MODEL="${OPENAI_MODEL:-gpt-4o-mini}"
 OPENAI_API_URL="${OPENAI_API_URL:-https://api.openai.com/v1/chat/completions}"
+LLM_AUTH_MODE="${LLM_AUTH_MODE:-bearer}"
 
 if [[ -z "$API_KEY" ]]; then
   echo "Error: N8N_API_KEY is required." >&2
@@ -78,15 +79,21 @@ if [[ "$GSHEET_CREDENTIAL_ID" == *"BEGIN PRIVATE KEY"* ]]; then
   exit 1
 fi
 
-if [[ -z "$OPENAI_API_KEY" ]]; then
+if [[ "$LLM_AUTH_MODE" != "bearer" && "$LLM_AUTH_MODE" != "none" ]]; then
+  echo "Error: LLM_AUTH_MODE must be 'bearer' or 'none'." >&2
+  exit 1
+fi
+
+if [[ "$LLM_AUTH_MODE" == "bearer" && -z "$OPENAI_API_KEY" ]]; then
   cat >&2 <<'EOF'
-Error: OPENAI_API_KEY is required for Stage 3 lead scoring.
+Error: OPENAI_API_KEY is required for Stage 3 lead scoring when LLM_AUTH_MODE=bearer.
 
 Set in n8n-workflows/.env:
   OPENAI_API_KEY=<your-openai-api-key>
 Optional:
   OPENAI_MODEL=gpt-4o-mini
   OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+  LLM_AUTH_MODE=bearer
 EOF
   exit 1
 fi
@@ -105,38 +112,66 @@ AUTH_HEADER=("X-N8N-API-KEY: $API_KEY")
 JSON_HEADER=("Content-Type: application/json")
 WORKFLOW_NAME="$(jq -r '.name' "$WORKFLOW_FILE")"
 
-PAYLOAD="$({
-  jq -c \
-    --arg doc "$GSHEET_DOCUMENT_ID" \
-    --arg sheet "$GSHEET_SHEET_NAME" \
-    --arg gsheet_id "$GSHEET_CREDENTIAL_ID" \
-    --arg gsheet_name "$GSHEET_CREDENTIAL_NAME" \
-    --arg openai_key "$OPENAI_API_KEY" \
-    --arg openai_model "$OPENAI_MODEL" \
-    --arg openai_url "$OPENAI_API_URL" '
-      .nodes |= map(
-        if .name == "log lead to sheets" then
-          .parameters.documentId.value = $doc
-          | .parameters.sheetName.value = $sheet
-          | .credentials.googleSheetsOAuth2Api.id = $gsheet_id
-          | .credentials.googleSheetsOAuth2Api.name = $gsheet_name
-        elif .name == "score lead with ai" then
-          .parameters.url = $openai_url
-          | .parameters.headerParameters.parameters |= map(
-              if .name == "Authorization" then
-                .value = ("=Bearer " + $openai_key)
-              else
-                .
-              end
-            )
-          | .parameters.jsonBody |= gsub("__OPENAI_MODEL__"; $openai_model)
-        else
-          .
-        end
-      )
-      | {name, nodes, connections, settings: {executionOrder: (.settings.executionOrder // "v1")}}
-    ' "$WORKFLOW_FILE"
-})"
+if [[ "$LLM_AUTH_MODE" == "none" ]]; then
+  PAYLOAD="$({
+    jq -c \
+      --arg doc "$GSHEET_DOCUMENT_ID" \
+      --arg sheet "$GSHEET_SHEET_NAME" \
+      --arg gsheet_id "$GSHEET_CREDENTIAL_ID" \
+      --arg gsheet_name "$GSHEET_CREDENTIAL_NAME" \
+      --arg openai_model "$OPENAI_MODEL" \
+      --arg openai_url "$OPENAI_API_URL" '
+        .nodes |= map(
+          if .name == "log lead to sheets" then
+            .parameters.documentId.value = $doc
+            | .parameters.sheetName.value = $sheet
+            | .credentials.googleSheetsOAuth2Api.id = $gsheet_id
+            | .credentials.googleSheetsOAuth2Api.name = $gsheet_name
+          elif .name == "score lead with ai" then
+            .parameters.url = $openai_url
+            | .parameters.headerParameters.parameters |= map(select(.name != "Authorization"))
+            | .parameters.jsonBody |= gsub("__OPENAI_MODEL__"; $openai_model)
+          else
+            .
+          end
+        )
+        | {name, nodes, connections, settings: {executionOrder: (.settings.executionOrder // "v1")}}
+      ' "$WORKFLOW_FILE"
+  })"
+else
+  PAYLOAD="$({
+    jq -c \
+      --arg doc "$GSHEET_DOCUMENT_ID" \
+      --arg sheet "$GSHEET_SHEET_NAME" \
+      --arg gsheet_id "$GSHEET_CREDENTIAL_ID" \
+      --arg gsheet_name "$GSHEET_CREDENTIAL_NAME" \
+      --arg openai_key "$OPENAI_API_KEY" \
+      --arg openai_model "$OPENAI_MODEL" \
+      --arg openai_url "$OPENAI_API_URL" '
+        .nodes |= map(
+          if .name == "log lead to sheets" then
+            .parameters.documentId.value = $doc
+            | .parameters.sheetName.value = $sheet
+            | .credentials.googleSheetsOAuth2Api.id = $gsheet_id
+            | .credentials.googleSheetsOAuth2Api.name = $gsheet_name
+          elif .name == "score lead with ai" then
+            .parameters.url = $openai_url
+            | .parameters.headerParameters.parameters |= map(
+                if .name == "Authorization" then
+                  .value = ("=Bearer " + $openai_key)
+                else
+                  .
+                end
+              )
+            | .parameters.jsonBody |= gsub("__OPENAI_MODEL__"; $openai_model)
+          else
+            .
+          end
+        )
+        | {name, nodes, connections, settings: {executionOrder: (.settings.executionOrder // "v1")}}
+      ' "$WORKFLOW_FILE"
+  })"
+fi
 
 echo "Checking API access at $BASE_URL ..."
 LIST_RESPONSE="$({
@@ -208,6 +243,11 @@ echo "Sheets Document ID: $GSHEET_DOCUMENT_ID"
 echo "Sheets Tab Name: $GSHEET_SHEET_NAME"
 echo "Sheets Credential ID: <set>"
 echo "Sheets Credential Name: $GSHEET_CREDENTIAL_NAME"
-echo "OpenAI API Key: <set>"
+if [[ "$LLM_AUTH_MODE" == "bearer" ]]; then
+  echo "OpenAI API Key: <set>"
+else
+  echo "OpenAI API Key: <not required>"
+fi
+echo "LLM Auth Mode: $LLM_AUTH_MODE"
 echo "OpenAI Model: $OPENAI_MODEL"
 echo "OpenAI URL: $OPENAI_API_URL"
