@@ -53,6 +53,7 @@ GSHEET_CREDENTIAL_NAME="${GSHEET_CREDENTIAL_NAME:-}"
 BOOKING_URL="${BOOKING_URL:-https://pavel.systems/#contact}"
 CASE_STUDY_URL="${CASE_STUDY_URL:-https://pavel.systems/#results}"
 COLD_GUIDE_URL="${COLD_GUIDE_URL:-https://pavel.systems/#contact}"
+HOT_ALERT_WEBHOOK_URL="${HOT_ALERT_WEBHOOK_URL:-}"
 OPENAI_API_KEY="${OPENAI_API_KEY:-}"
 OPENROUTER_API_KEY="${OPENROUTER_API_KEY:-}"
 OPENAI_MODEL="${OPENAI_MODEL:-gpt-4o-mini}"
@@ -151,6 +152,7 @@ if [[ "$LLM_AUTH_MODE" == "none" ]]; then
       --arg booking_url "$BOOKING_URL" \
       --arg case_study_url "$CASE_STUDY_URL" \
       --arg cold_guide_url "$COLD_GUIDE_URL" \
+      --arg hot_alert_webhook "$HOT_ALERT_WEBHOOK_URL" \
       --arg openai_model "$OPENAI_MODEL" \
       --arg openai_url "$OPENAI_API_URL" '
         .nodes |= map(
@@ -167,6 +169,7 @@ if [[ "$LLM_AUTH_MODE" == "none" ]]; then
             .parameters.jsonOutput |= gsub("__BOOKING_URL__"; $booking_url)
             | .parameters.jsonOutput |= gsub("__CASE_STUDY_URL__"; $case_study_url)
             | .parameters.jsonOutput |= gsub("__COLD_GUIDE_URL__"; $cold_guide_url)
+            | .parameters.jsonOutput |= gsub("__HOT_ALERT_WEBHOOK_URL__"; $hot_alert_webhook)
           else
             .
           end
@@ -184,6 +187,7 @@ else
       --arg booking_url "$BOOKING_URL" \
       --arg case_study_url "$CASE_STUDY_URL" \
       --arg cold_guide_url "$COLD_GUIDE_URL" \
+      --arg hot_alert_webhook "$HOT_ALERT_WEBHOOK_URL" \
       --arg llm_key "$LLM_API_KEY" \
       --arg openai_model "$OPENAI_MODEL" \
       --arg openai_url "$OPENAI_API_URL" '
@@ -207,6 +211,7 @@ else
             .parameters.jsonOutput |= gsub("__BOOKING_URL__"; $booking_url)
             | .parameters.jsonOutput |= gsub("__CASE_STUDY_URL__"; $case_study_url)
             | .parameters.jsonOutput |= gsub("__COLD_GUIDE_URL__"; $cold_guide_url)
+            | .parameters.jsonOutput |= gsub("__HOT_ALERT_WEBHOOK_URL__"; $hot_alert_webhook)
           else
             .
           end
@@ -297,3 +302,4 @@ echo "OpenAI URL: $OPENAI_API_URL"
 echo "Booking URL: $BOOKING_URL"
 echo "Case Study URL: $CASE_STUDY_URL"
 echo "Cold Guide URL: $COLD_GUIDE_URL"
+echo "Hot Alert Webhook URL: ${HOT_ALERT_WEBHOOK_URL:-<not set>}"

@@ -177,7 +177,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={{ (() => {\n  const lead = $('create scored fields').item.json || {};\n  const fullName = (lead.name || '').toString().trim();\n  const firstNameRaw = fullName.split(' ')[0] || 'there';\n  const firstName = firstNameRaw.replace(/[^a-zA-Z'-]/g, '') || 'there';\n\n  const priority = ((lead.leadPriority || 'cold') + '').toLowerCase();\n  const isSpam = ((lead.spamFlag || 'false') + '') === 'true';\n  const score = lead.leadScore !== undefined && lead.leadScore !== '' ? lead.leadScore : 'n/a';\n\n  const bookingUrl = '__BOOKING_URL__';\n  const caseStudyUrl = '__CASE_STUDY_URL__';\n  const coldGuideUrl = '__COLD_GUIDE_URL__';\n\n  let responseStrategy = 'cold';\n  if (isSpam) {\n    responseStrategy = 'spam';\n  } else if (priority === 'hot') {\n    responseStrategy = 'hot';\n  } else if (priority === 'warm') {\n    responseStrategy = 'warm';\n  }\n\n  let responseSubject = 'Thanks for reaching out to pavel.systems';\n  let responseOpening = 'Thanks for your message. I reviewed your request and I can help with this.';\n  let responseCTA = 'Reply with your top priority and I will send the best next step.';\n  const responseSignoff = 'Pavel Ugamoti';\n\n  if (responseStrategy === 'hot') {\n    responseSubject = 'Great fit. Let\\'s map your automation rollout';\n    responseOpening = 'Your request looks like a strong fit for immediate implementation support.';\n    responseCTA = 'Best next step: book a 20-minute discovery call here: ' + bookingUrl;\n  } else if (responseStrategy === 'warm') {\n    responseSubject = 'Next step for your automation project';\n    responseOpening = 'Thanks for the context. This looks like a good candidate for a scoped automation sprint.';\n    responseCTA = 'Before we call, review a relevant case study: ' + caseStudyUrl + ' then reply with your stack and first workflow.';\n  } else if (responseStrategy === 'cold') {\n    responseSubject = 'Thanks. Quick details so I can scope this properly';\n    responseOpening = 'Thanks for reaching out. I can still help, but I need a bit more detail before recommending an approach.';\n    responseCTA = 'Reply with your main bottleneck, tools in use, and desired outcome. Quick intake guide: ' + coldGuideUrl;\n  } else if (responseStrategy === 'spam') {\n    responseSubject = 'Message received';\n    responseOpening = 'Thanks, your message was received.';\n    responseCTA = 'If this is a genuine automation inquiry, reply with your company website and exact workflow goal.';\n  }\n\n  return {\n    ...lead,\n    firstName,\n    responseStrategy,\n    responseSubject,\n    responseOpening,\n    responseCTA,\n    responseSignoff,\n    bookingUrl,\n    caseStudyUrl,\n    coldGuideUrl,\n    responseMeta: 'Priority: ' + priority + ' | Score: ' + score\n  };\n})() }}",
+        "jsonOutput": "={{ (() => {\n  const lead = $('create scored fields').item.json || {};\n  const fullName = (lead.name || '').toString().trim();\n  const firstNameRaw = fullName.split(' ')[0] || 'there';\n  const firstName = firstNameRaw.replace(/[^a-zA-Z'-]/g, '') || 'there';\n\n  const priority = ((lead.leadPriority || 'cold') + '').toLowerCase();\n  const isSpam = ((lead.spamFlag || 'false') + '') === 'true';\n  const score = lead.leadScore !== undefined && lead.leadScore !== '' ? lead.leadScore : 'n/a';\n\n  const bookingUrl = '__BOOKING_URL__';\n  const caseStudyUrl = '__CASE_STUDY_URL__';\n  const coldGuideUrl = '__COLD_GUIDE_URL__';\n  const hotAlertWebhook = '__HOT_ALERT_WEBHOOK_URL__';\n\n  let responseStrategy = 'cold';\n  if (isSpam) {\n    responseStrategy = 'spam';\n  } else if (priority === 'hot') {\n    responseStrategy = 'hot';\n  } else if (priority === 'warm') {\n    responseStrategy = 'warm';\n  }\n\n  let responseSubject = 'Thanks for reaching out to pavel.systems';\n  let responseOpening = 'Thanks for your message. I reviewed your request and I can help with this.';\n  let responseCTA = 'Reply with your top priority and I will send the best next step.';\n  const responseSignoff = 'Pavel Ugamoti';\n\n  if (responseStrategy === 'hot') {\n    responseSubject = 'Great fit. Let\\'s map your automation rollout';\n    responseOpening = 'Your request looks like a strong fit for immediate implementation support.';\n    responseCTA = 'Best next step: book a 20-minute discovery call here: ' + bookingUrl;\n  } else if (responseStrategy === 'warm') {\n    responseSubject = 'Next step for your automation project';\n    responseOpening = 'Thanks for the context. This looks like a good candidate for a scoped automation sprint.';\n    responseCTA = 'Before we call, review a relevant case study: ' + caseStudyUrl + ' then reply with your stack and first workflow.';\n  } else if (responseStrategy === 'cold') {\n    responseSubject = 'Thanks. Quick details so I can scope this properly';\n    responseOpening = 'Thanks for reaching out. I can still help, but I need a bit more detail before recommending an approach.';\n    responseCTA = 'Reply with your main bottleneck, tools in use, and desired outcome. Quick intake guide: ' + coldGuideUrl;\n  } else if (responseStrategy === 'spam') {\n    responseSubject = 'Message received';\n    responseOpening = 'Thanks, your message was received.';\n    responseCTA = 'If this is a genuine automation inquiry, reply with your company website and exact workflow goal.';\n  }\n\n  const sendClientReply = responseStrategy !== 'spam';\n  const sendHotAlert = responseStrategy === 'hot' && !!(hotAlertWebhook || '').trim();\n\n  return {\n    ...lead,\n    firstName,\n    responseStrategy,\n    responseSubject,\n    responseOpening,\n    responseCTA,\n    responseSignoff,\n    bookingUrl,\n    caseStudyUrl,\n    coldGuideUrl,\n    hotAlertWebhook,\n    sendClientReply,\n    sendHotAlert,\n    responseMeta: 'Priority: ' + priority + ' | Score: ' + score\n  };\n})() }}",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -188,6 +188,112 @@
       ],
       "id": "7f4e9e4c-4e2d-44f3-8b95-1978aa0d9401",
       "name": "create response fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b87e8fb3-74cf-4f57-9e8e-6ea3599606cc",
+              "leftValue": "={{ $('create response fields').item.json.responseStrategy }}",
+              "rightValue": "spam",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        -320
+      ],
+      "id": "4d6f8e70-9f6d-4b5a-8c0f-6e9fd63a3401",
+      "name": "route client reply"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0b6152c6-2f2e-4c86-bdb3-b8f759529433",
+              "leftValue": "={{ $('create response fields').item.json.responseStrategy }}",
+              "rightValue": "hot",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "e8d9945b-444a-495c-a0cb-62db2099d369",
+              "leftValue": "={{ $('create response fields').item.json.hotAlertWebhook }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        -560
+      ],
+      "id": "8c8e4b44-392f-4ea6-8c3c-14ec5a10a2f8",
+      "name": "route hot lead alert"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('create response fields').item.json.hotAlertWebhook }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"leadName\": $('create response fields').item.json.name, \"leadEmail\": $('create response fields').item.json.email, \"leadCompany\": $('create response fields').item.json.company, \"leadPriority\": $('create response fields').item.json.leadPriority, \"leadScore\": $('create response fields').item.json.leadScore, \"leadReason\": $('create response fields').item.json.leadScoreReason, \"source\": $('create response fields').item.json.source, \"timestamp\": $('create response fields').item.json.timestamp } }}",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        -560
+      ],
+      "id": "3f909e9b-59c2-40ec-b8ef-7b92c4a5bbf3",
+      "name": "send hot lead alert webhook",
+      "alwaysOutputData": true,
+      "continueOnFail": true
     }
   ],
   "connections": {
@@ -254,11 +360,40 @@
             "index": 0
           },
           {
-            "node": "send message to client",
+            "node": "route client reply",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "route hot lead alert",
             "type": "main",
             "index": 0
           }
         ]
+      ]
+    },
+    "route client reply": {
+      "main": [
+        [
+          {
+            "node": "send message to client",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "route hot lead alert": {
+      "main": [
+        [
+          {
+            "node": "send hot lead alert webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
       ]
     }
   },

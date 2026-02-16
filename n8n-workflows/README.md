@@ -196,6 +196,7 @@ Stage 4 builds on Stage 3 and adds adaptive reply copy for the client email.
    - `BOOKING_URL` (used for `hot` replies)
    - `CASE_STUDY_URL` (used for `warm` replies)
    - `COLD_GUIDE_URL` (used for `cold` replies)
+   - `HOT_ALERT_WEBHOOK_URL` (optional; sends hot lead payload to Slack/Telegram/Make webhook)
 3. Deploy Stage 4:
 
 ```bash
@@ -226,4 +227,8 @@ Notes:
   - `hot` => `BOOKING_URL`
   - `warm` => `CASE_STUDY_URL`
   - `cold` => `COLD_GUIDE_URL`
+- Spam-safe routing:
+  - `responseStrategy=spam` skips `send message to client` entirely.
+- Optional hot lead alert routing:
+  - If `HOT_ALERT_WEBHOOK_URL` is set and lead is `hot`, n8n posts lead summary JSON to that webhook.
 - Response metadata is appended and can be logged to Sheets if matching columns exist.

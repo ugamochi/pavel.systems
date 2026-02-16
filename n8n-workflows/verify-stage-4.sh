@@ -54,14 +54,38 @@ if ! command -v jq >/dev/null 2>&1; then
   exit 1
 fi
 
-LATEST_ID=$(curl -sS -H "X-N8N-API-KEY: $API_KEY" -H 'Cache-Control: no-cache' "$BASE_URL/api/v1/executions?limit=1" | jq -r '.data[0].id // empty')
+fetch_json() {
+  local url="$1"
+  local attempts=8
+  local delay_seconds=2
+  local response=""
+  local i
+
+  for ((i=1; i<=attempts; i++)); do
+    response="$(curl -sS -H "X-N8N-API-KEY: $API_KEY" -H 'Cache-Control: no-cache' "$url" || true)"
+    if jq -e . >/dev/null 2>&1 <<< "$response"; then
+      printf '%s' "$response"
+      return 0
+    fi
+    sleep "$delay_seconds"
+  done
+
+  return 1
+}
+
+LIST_JSON="$(fetch_json "$BASE_URL/api/v1/executions?limit=1" || true)"
+LATEST_ID="$(echo "$LIST_JSON" | jq -r '.data[0].id // empty' 2>/dev/null || true)"
 if [[ -z "$LATEST_ID" ]]; then
   echo "No executions found."
   exit 1
 fi
 
 EXEC_JSON=$(mktemp)
-curl -sS -H "X-N8N-API-KEY: $API_KEY" "$BASE_URL/api/v1/executions/$LATEST_ID?includeData=true" > "$EXEC_JSON"
+if ! fetch_json "$BASE_URL/api/v1/executions/$LATEST_ID?includeData=true" > "$EXEC_JSON"; then
+  echo "Error: could not fetch execution details." >&2
+  rm -f "$EXEC_JSON"
+  exit 1
+fi
 
 echo "Execution ID: $LATEST_ID"
 jq -r '"Status: " + (.status|tostring), "Finished: " + (.finished|tostring), "Workflow ID: " + (.workflowId|tostring)' "$EXEC_JSON"
@@ -100,9 +124,17 @@ jq -r '
 echo ""
 echo "Client Email Node"
 jq -r '
-  .data.resultData.runData["send message to client"][0] as $r |
-  "Execution status: " + (($r.executionStatus // "<missing>")|tostring),
-  "Node error: " + (($r.error.message // $r.data.main[0][0].error.message // $r.data.main[0][0].json.error // "<none>")|tostring)
+  (.data.resultData.runData["send message to client"][0] // null) as $r |
+  "Execution status: " + ((if $r == null then "<skipped>" else ($r.executionStatus // "<missing>") end)|tostring),
+  "Node error: " + ((if $r == null then "<none>" else ($r.error.message // $r.data.main[0][0].error.message // $r.data.main[0][0].json.error // "<none>") end)|tostring)
+' "$EXEC_JSON"
+
+echo ""
+echo "Hot Alert Node"
+jq -r '
+  (.data.resultData.runData["send hot lead alert webhook"][0] // null) as $r |
+  "Execution status: " + ((if $r == null then "<skipped>" else ($r.executionStatus // "<missing>") end)|tostring),
+  "Node error: " + ((if $r == null then "<none>" else ($r.error.message // $r.data.main[0][0].error.message // $r.data.main[0][0].json.error // "<none>") end)|tostring)
 ' "$EXEC_JSON"
 
 echo ""
