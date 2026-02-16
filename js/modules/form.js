@@ -35,9 +35,8 @@ if (leadForm) {
     };
 
     try {
-      // Local n8n: http://localhost:5678/webhook/lead-form
-      // Production: replace with your n8n cloud or public webhook URL
-      const webhookUrl = 'http://localhost:5678/webhook/lead-form';
+      // Production: n8n on Render
+      const webhookUrl = 'https://n8n-service-uwaf.onrender.com/webhook/lead-form';
 
       if (!webhookUrl || webhookUrl.startsWith('YOUR_')) {
         console.log('Form data (dev mode):', formData);
