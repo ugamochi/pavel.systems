@@ -2,44 +2,15 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOADED_ENV_FILES=()
-
-load_env_file() {
-  local env_file="$1"
-  if [[ -f "$env_file" ]]; then
-    while IFS= read -r line || [[ -n "$line" ]]; do
-      [[ -z "${line//[[:space:]]/}" ]] && continue
-      [[ "$line" =~ ^[[:space:]]*# ]] && continue
-      if [[ "$line" =~ ^[[:space:]]*(export[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
-        local key="${BASH_REMATCH[2]}"
-        local value="${BASH_REMATCH[3]}"
-      else
-        continue
-      fi
-
-      if [[ ${#value} -ge 2 ]]; then
-        if [[ "${value:0:1}" == '"' && "${value: -1}" == '"' ]]; then
-          value="${value:1:${#value}-2}"
-        elif [[ "${value:0:1}" == "'" && "${value: -1}" == "'" ]]; then
-          value="${value:1:${#value}-2}"
-        fi
-      fi
-
-      export "$key=$value"
-    done < "$env_file"
-    LOADED_ENV_FILES+=("$env_file")
-  fi
-}
-
-load_env_file "$PWD/.env"
-load_env_file "$PWD/.env.local"
-load_env_file "$SCRIPT_DIR/.env"
-load_env_file "$SCRIPT_DIR/.env.local"
-load_env_file "$SCRIPT_DIR/../.env"
-load_env_file "$SCRIPT_DIR/../.env.local"
-if [[ -n "${N8N_ENV_FILE:-}" ]]; then
-  load_env_file "$N8N_ENV_FILE"
+COMMON_LIB="$SCRIPT_DIR/lib/common.sh"
+if [[ ! -f "$COMMON_LIB" ]]; then
+  echo "Error: common library not found: $COMMON_LIB" >&2
+  exit 1
 fi
+# shellcheck source=lib/common.sh
+source "$COMMON_LIB"
+
+load_default_env_files "$SCRIPT_DIR"
 
 BASE_URL="${N8N_BASE_URL:-https://n8n-service-uwaf.onrender.com}"
 API_KEY="${N8N_API_KEY:-}"
@@ -51,64 +22,22 @@ if [[ -z "$API_KEY" ]]; then
   exit 1
 fi
 
-if ! command -v jq >/dev/null 2>&1; then
-  echo "Error: jq is required." >&2
-  exit 1
-fi
+require_command jq
 
 if [[ -z "$WORKFLOW_NAME" && -f "$WORKFLOW_FILE" ]]; then
   WORKFLOW_NAME="$(jq -r '.name // empty' "$WORKFLOW_FILE")"
 fi
 WORKFLOW_NAME="${WORKFLOW_NAME:-emails from pavel.systems}"
 
-fetch_json() {
-  local url="$1"
-  local attempts=8
-  local delay_seconds=2
-  local response=""
-  local i
-
-  for ((i=1; i<=attempts; i++)); do
-    response="$(curl -sS -H "X-N8N-API-KEY: $API_KEY" -H 'Cache-Control: no-cache' "$url" || true)"
-    if jq -e . >/dev/null 2>&1 <<< "$response"; then
-      printf '%s' "$response"
-      return 0
-    fi
-    sleep "$delay_seconds"
-  done
-
-  return 1
-}
-
 WF_LIST_JSON="$(fetch_json "$BASE_URL/api/v1/workflows" || true)"
-WORKFLOW_ID="$(
-  echo "$WF_LIST_JSON" | jq -r --arg name "$WORKFLOW_NAME" '
-    if type == "array" then
-      (.[] | select(.name == $name) | .id)
-    elif has("data") then
-      (.data[]? | select(.name == $name) | .id)
-    else
-      empty
-    end
-  ' | head -n1
-)"
+WORKFLOW_ID="$(extract_workflow_id "$WF_LIST_JSON" "$WORKFLOW_NAME")"
 if [[ -z "$WORKFLOW_ID" ]]; then
   echo "Error: workflow not found by name: $WORKFLOW_NAME" >&2
   exit 1
 fi
 
 LIST_JSON="$(fetch_json "$BASE_URL/api/v1/executions?limit=100" || true)"
-LATEST_ID="$(
-  echo "$LIST_JSON" | jq -r --arg wf "$WORKFLOW_ID" '
-    if type == "array" then
-      (.[] | select((.workflowId | tostring) == $wf) | .id)
-    elif has("data") then
-      (.data[]? | select((.workflowId | tostring) == $wf) | .id)
-    else
-      empty
-    end
-  ' | head -n1
-)"
+LATEST_ID="$(extract_execution_id_for_workflow "$LIST_JSON" "$WORKFLOW_ID")"
 if [[ -z "$LATEST_ID" ]]; then
   echo "No executions found for workflow '$WORKFLOW_NAME' (id: $WORKFLOW_ID)." >&2
   exit 1

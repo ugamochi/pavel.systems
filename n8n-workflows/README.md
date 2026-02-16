@@ -13,6 +13,7 @@
 - `test-webhook.sh`: Webhook smoke test payload sender.
 - `verify-stage-3.sh`: Reads latest execution for the target workflow and prints AI scoring + Sheets node status.
 - `verify-stage-4.sh`: Reads latest execution for the target workflow and prints scoring + response strategy + client email + sheets status.
+- `lib/common.sh`: Shared bash helpers for env loading, retries, and workflow/execution lookup.
 - `session-2026-02-16-stage3-provider-instructions.md`: Stage 3 hardening rules + provider switch playbook.
 - `CLIENT_ONE_PAGER.md`: Short client-facing explanation of the system and business value.
 - `CLIENT_IMPLEMENTATION_PLAYBOOK.md`: Best-practice guide for building this system in client-owned accounts.
