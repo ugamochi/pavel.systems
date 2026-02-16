@@ -5,11 +5,14 @@
 - `stage-1-basic.json`: Stage 1 lead form workflow JSON.
 - `stage-2-sheets.json`: Stage 2 workflow variant with Google Sheets logging branch.
 - `stage-3-scoring.json`: Stage 3 workflow variant with AI scoring + Sheets logging.
+- `stage-4-personalized.json`: Stage 4 workflow variant with personalized client responses driven by score/priority.
 - `deploy-stage-1.sh`: API-based deploy script (update/create + activate).
 - `deploy-stage-2.sh`: Stage 2 deploy script with Google Sheets placeholders injected from env.
 - `deploy-stage-3.sh`: Stage 3 deploy script with Google Sheets + OpenAI placeholders injected from env.
+- `deploy-stage-4.sh`: Stage 4 deploy script (same env as Stage 3) for personalized response workflow.
 - `test-webhook.sh`: Webhook smoke test payload sender.
 - `verify-stage-3.sh`: Reads latest execution and prints AI scoring + Sheets node status.
+- `verify-stage-4.sh`: Reads latest execution and prints scoring + response strategy + client email + sheets status.
 - `session-2026-02-16-stage3-provider-instructions.md`: Stage 3 hardening rules + provider switch playbook.
 
 ## Deploy to Render n8n (API)
@@ -183,3 +186,36 @@ Important:
 
 - Your n8n server (Render) must be able to reach `OPENAI_API_URL`.
 - `localhost` on your laptop is not reachable from Render.
+
+## Stage 4 (Automated Personalized Responses)
+
+Stage 4 builds on Stage 3 and adds adaptive reply copy for the client email.
+
+1. Keep Stage 3 variables configured in `n8n-workflows/.env`.
+2. Deploy Stage 4:
+
+```bash
+bash n8n-workflows/deploy-stage-4.sh
+```
+
+3. Send a test lead (or your own custom payload):
+
+```bash
+bash n8n-workflows/test-webhook.sh
+```
+
+4. Verify latest execution:
+
+```bash
+bash n8n-workflows/verify-stage-4.sh
+```
+
+Notes:
+
+- Stage 4 adds `create response fields` node after scoring.
+- Client email subject/body are now personalized from:
+  - `responseStrategy` (`hot`, `warm`, `cold`, `spam`)
+  - `responseSubject`
+  - `responseOpening`
+  - `responseCTA`
+- Response metadata is appended and can be logged to Sheets if matching columns exist.
