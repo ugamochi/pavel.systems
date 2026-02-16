@@ -192,19 +192,23 @@ Important:
 Stage 4 builds on Stage 3 and adds adaptive reply copy for the client email.
 
 1. Keep Stage 3 variables configured in `n8n-workflows/.env`.
-2. Deploy Stage 4:
+2. Optional (recommended) Stage 4 link variables in `.env`:
+   - `BOOKING_URL` (used for `hot` replies)
+   - `CASE_STUDY_URL` (used for `warm` replies)
+   - `COLD_GUIDE_URL` (used for `cold` replies)
+3. Deploy Stage 4:
 
 ```bash
 bash n8n-workflows/deploy-stage-4.sh
 ```
 
-3. Send a test lead (or your own custom payload):
+4. Send a test lead (or your own custom payload):
 
 ```bash
 bash n8n-workflows/test-webhook.sh
 ```
 
-4. Verify latest execution:
+5. Verify latest execution:
 
 ```bash
 bash n8n-workflows/verify-stage-4.sh
@@ -218,4 +222,8 @@ Notes:
   - `responseSubject`
   - `responseOpening`
   - `responseCTA`
+- `responseCTA` now includes env-driven links by segment:
+  - `hot` => `BOOKING_URL`
+  - `warm` => `CASE_STUDY_URL`
+  - `cold` => `COLD_GUIDE_URL`
 - Response metadata is appended and can be logged to Sheets if matching columns exist.

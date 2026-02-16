@@ -50,6 +50,9 @@ GSHEET_DOCUMENT_ID="${GSHEET_DOCUMENT_ID:-}"
 GSHEET_SHEET_NAME="${GSHEET_SHEET_NAME:-}"
 GSHEET_CREDENTIAL_ID="${GSHEET_CREDENTIAL_ID:-}"
 GSHEET_CREDENTIAL_NAME="${GSHEET_CREDENTIAL_NAME:-}"
+BOOKING_URL="${BOOKING_URL:-https://pavel.systems/#contact}"
+CASE_STUDY_URL="${CASE_STUDY_URL:-https://pavel.systems/#results}"
+COLD_GUIDE_URL="${COLD_GUIDE_URL:-https://pavel.systems/#contact}"
 OPENAI_API_KEY="${OPENAI_API_KEY:-}"
 OPENROUTER_API_KEY="${OPENROUTER_API_KEY:-}"
 OPENAI_MODEL="${OPENAI_MODEL:-gpt-4o-mini}"
@@ -145,6 +148,9 @@ if [[ "$LLM_AUTH_MODE" == "none" ]]; then
       --arg sheet "$GSHEET_SHEET_NAME" \
       --arg gsheet_id "$GSHEET_CREDENTIAL_ID" \
       --arg gsheet_name "$GSHEET_CREDENTIAL_NAME" \
+      --arg booking_url "$BOOKING_URL" \
+      --arg case_study_url "$CASE_STUDY_URL" \
+      --arg cold_guide_url "$COLD_GUIDE_URL" \
       --arg openai_model "$OPENAI_MODEL" \
       --arg openai_url "$OPENAI_API_URL" '
         .nodes |= map(
@@ -157,6 +163,10 @@ if [[ "$LLM_AUTH_MODE" == "none" ]]; then
             .parameters.url = $openai_url
             | .parameters.headerParameters.parameters |= map(select(.name != "Authorization"))
             | .parameters.jsonBody |= gsub("__OPENAI_MODEL__"; $openai_model)
+          elif .name == "create response fields" then
+            .parameters.jsonOutput |= gsub("__BOOKING_URL__"; $booking_url)
+            | .parameters.jsonOutput |= gsub("__CASE_STUDY_URL__"; $case_study_url)
+            | .parameters.jsonOutput |= gsub("__COLD_GUIDE_URL__"; $cold_guide_url)
           else
             .
           end
@@ -171,6 +181,9 @@ else
       --arg sheet "$GSHEET_SHEET_NAME" \
       --arg gsheet_id "$GSHEET_CREDENTIAL_ID" \
       --arg gsheet_name "$GSHEET_CREDENTIAL_NAME" \
+      --arg booking_url "$BOOKING_URL" \
+      --arg case_study_url "$CASE_STUDY_URL" \
+      --arg cold_guide_url "$COLD_GUIDE_URL" \
       --arg llm_key "$LLM_API_KEY" \
       --arg openai_model "$OPENAI_MODEL" \
       --arg openai_url "$OPENAI_API_URL" '
@@ -190,6 +203,10 @@ else
                 end
               )
             | .parameters.jsonBody |= gsub("__OPENAI_MODEL__"; $openai_model)
+          elif .name == "create response fields" then
+            .parameters.jsonOutput |= gsub("__BOOKING_URL__"; $booking_url)
+            | .parameters.jsonOutput |= gsub("__CASE_STUDY_URL__"; $case_study_url)
+            | .parameters.jsonOutput |= gsub("__COLD_GUIDE_URL__"; $cold_guide_url)
           else
             .
           end
@@ -277,3 +294,6 @@ fi
 echo "LLM Auth Mode: $LLM_AUTH_MODE"
 echo "OpenAI Model: $OPENAI_MODEL"
 echo "OpenAI URL: $OPENAI_API_URL"
+echo "Booking URL: $BOOKING_URL"
+echo "Case Study URL: $CASE_STUDY_URL"
+echo "Cold Guide URL: $COLD_GUIDE_URL"

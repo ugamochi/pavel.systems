@@ -207,25 +207,25 @@ Copyright 2026 Pavel Ugamoti. All rights reserved.
 - [x] Contact form UI
 - [x] Update social links
 - [x] UI/UX audit + color scheme overhaul
-- [ ] n8n webhook setup (guide ready: `docs/N8N_SETUP_STAGE1.md`)
-- [ ] Email notifications
-- [ ] Deploy to production
+- [x] n8n webhook setup (guide ready: `docs/N8N_SETUP_STAGE1.md`)
+- [x] Email notifications
+- [x] Deploy to production
 
 ### Sprint 2
 - [x] SEO meta tags (Open Graph, Twitter Cards)
 - [x] Favicon
 - [x] og-image for social sharing (og-image.svg + og-image.html)
-- [ ] Google Sheets lead tracking
+- [x] Google Sheets lead tracking
 - [x] Analytics setup (Plausible)
 
 ### Sprint 3
-- [ ] AI lead scoring
-- [ ] Conditional routing
+- [x] AI lead scoring
+- [x] Conditional routing
 - [ ] Slack notifications for high-value leads
 
 ### Sprint 4
 - [x] Accessibility enhancements (WCAG contrast, reduced-motion, focus states)
-- [ ] Automated personalized responses
+- [x] Automated personalized responses
 - [ ] Meta case study: "How I Built My Own Lead Pipeline"
 
 ### Sprint 5 (Ongoing)

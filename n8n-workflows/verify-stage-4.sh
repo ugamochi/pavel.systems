@@ -93,6 +93,7 @@ jq -r '
   (.data.resultData.runData["create response fields"][0].data.main[0][0].json // {}) as $j |
   "responseStrategy: " + (($j.responseStrategy // "<missing>")|tostring),
   "responseSubject: " + (($j.responseSubject // "<missing>")|tostring),
+  "responseCTA: " + (($j.responseCTA // "<missing>")|tostring),
   "responseMeta: " + (($j.responseMeta // "<missing>")|tostring)
 ' "$EXEC_JSON"
 
