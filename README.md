@@ -9,7 +9,7 @@ A single-page portfolio website showcasing AI automation services for profession
 - Geist + JetBrains Mono (Google Fonts)
 - CSS custom properties for theming (dark/light)
 - Contact form → n8n webhook (see [n8n repo](https://github.com/ugamochi/n8n-workflows))
-- Deployed on Netlify
+- Deployed on GitHub Pages
 
 ## Run locally
 
@@ -32,8 +32,20 @@ js/
   main.js             # module loader
   modules/            # nav, theme, animations, form
 assets/images/        # og-image
-netlify.toml
 ```
+
+## Current Services On Website
+
+The live Services section currently includes:
+
+1. AI Lead Pipeline & Qualification Engine
+2. Document Intelligence (PDF-to-Data)
+3. Client Onboarding Automation
+4. Internal Company Brain (RAG)
+5. Automated Performance Reporting
+6. OpenClaw Setup & Security Hardening
+
+Service documentation for these offerings is maintained in the sibling workspace folder `../services/`.
 
 ## License
 
