@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document Intelligence (PDF-to-Data) | Pavel Ugamoti</title>
-  <meta name="description" content="Convert PDFs into validated business data with extraction, confidence checks, exception handling, and client-owned automation workflows.">
+  <title>Service | Pavel Ugamoti</title>
+  <meta name="description" content="Service implementation page for AI automation systems.">
+  <meta property="og:title" content="Service | Pavel Ugamoti">
+  <meta property="og:description" content="Service implementation page for AI automation systems.">
+  <link rel="canonical" id="canonicalLink" href="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,116 +23,44 @@
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
+
   <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container">
-      <a href="../../index.html" class="nav-logo">pavel<span>.</span>systems</a>
+      <a href="../../index.html" class="nav-logo" aria-label="Pavel Ugamoti homepage">pavel<span>.</span>systems</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="../../index.html">Home</a></li>
         <li><a href="#problem">Problem</a></li>
         <li><a href="#process">Process</a></li>
+        <li><a href="#packages">Packages</a></li>
         <li><a href="#faq">FAQ</a></li>
-        <li><button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle theme"><svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></li>
-        <li><a href="#contact" class="nav-cta">Send Project Details<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+        <li>
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </li>
+        <li><a href="#contact" class="nav-cta">Send Project Details
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a></li>
       </ul>
-      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
-  <main class="service-page" id="main">
-    <section class="service-hero">
-      <div class="container service-hero-grid">
-        <div>
-          <div class="service-kicker">Service 02</div>
-          <h1 class="service-headline">Document Intelligence (PDF-to-Data)</h1>
-          <p class="service-sub">Replace repetitive PDF data entry with a client-owned extraction and validation pipeline that routes clean records to your systems and exceptions to review.</p>
-          <div class="service-cta-row"><a href="#contact" class="btn-primary">Send Project Details</a><a href="#contact" class="btn-ghost">Book a Discovery Call</a></div>
-          <p class="service-note">Pricing range: Starter <strong>&euro;1,500-&euro;3,000</strong> · Growth <strong>&euro;3,500-&euro;7,000</strong> · Scale <strong>&euro;8,000+</strong>. Final quote after discovery.</p>
-        </div>
-        <div class="service-proof-grid">
-          <article class="service-proof"><div class="service-proof-value">70-90%</div><div class="service-proof-label">Reduction in manual data entry effort</div></article>
-          <article class="service-proof"><div class="service-proof-value">Higher</div><div class="service-proof-label">Data quality before CRM/ERP writeback</div></article>
-          <article class="service-proof"><div class="service-proof-value">Audit</div><div class="service-proof-label">Traceable processing with confidence handling</div></article>
-        </div>
-      </div>
-    </section>
+  <main class="service-page" id="main" data-service-slug="document-intelligence-pdf-to-data"></main>
 
-    <section class="service-section" id="problem">
-      <div class="container">
-        <div class="section-label">The Problem</div>
-        <h2 class="section-title">Teams still spend hours <em>retyping PDFs</em></h2>
-        <div class="service-grid-3">
-          <article class="service-card-lite"><h3>Manual bottlenecks</h3><p>High-volume docs create recurring admin load and process delays.</p></article>
-          <article class="service-card-lite"><h3>Silent errors</h3><p>Bad extracted fields move downstream and break reporting and operations.</p></article>
-          <article class="service-card-lite"><h3>No confidence workflow</h3><p>Low-quality extractions are mixed with valid records instead of reviewed safely.</p></article>
-        </div>
-      </div>
-    </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">&copy; 2026 Pavel Ugamoti. Agentic Architect.</div>
+      <ul class="footer-links">
+        <li><a href="https://www.linkedin.com/in/pavel-ugamoti/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ugamochi.pavel@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
 
-    <section class="service-section" id="process">
-      <div class="container">
-        <div class="section-label">How It Works</div>
-        <h2 class="section-title">From file ingest to <em>validated output</em></h2>
-        <div class="service-step-list">
-          <article class="service-step"><div class="service-step-num">01</div><div><h4>Source mapping</h4><p>Map doc families, required fields, and destination schema.</p></div></article>
-          <article class="service-step"><div class="service-step-num">02</div><div><h4>Extraction layer</h4><p>Use AI vision/OCR stack per document type and quality profile.</p></div></article>
-          <article class="service-step"><div class="service-step-num">03</div><div><h4>Validation layer</h4><p>Run required, format, and business-rule checks before writeback.</p></div></article>
-          <article class="service-step"><div class="service-step-num">04</div><div><h4>Exception routing</h4><p>Route low-confidence records to human review queue by priority.</p></div></article>
-          <article class="service-step"><div class="service-step-num">05</div><div><h4>Delivery + audit</h4><p>Push clean records to systems and log every processing decision.</p></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="service-section">
-      <div class="container service-grid-2">
-        <div>
-          <div class="section-label">Deliverables</div>
-          <h2 class="section-title">Operationally <em>safe by design</em></h2>
-          <ul class="service-list">
-            <li>File intake pipeline (uploads, folders, or email attachments)</li>
-            <li>Schema-aware extraction workflow</li>
-            <li>Validation rules and confidence thresholds</li>
-            <li>Exception handling and reviewer workflow</li>
-            <li>Destination sync to sheets/CRM/ERP</li>
-            <li>Runbook and handover package</li>
-          </ul>
-        </div>
-        <div>
-          <div class="section-label">Integrations</div>
-          <h2 class="section-title">Built on your <em>existing stack</em></h2>
-          <div class="service-badges"><span>Google Drive</span><span>Dropbox</span><span>Email attachments</span><span>n8n</span><span>Claude Vision / OCR</span><span>Sheets / CRM / ERP</span></div>
-          <div class="service-pricing-note">Client-owned credentials and storage from day one. No shared-secret dependency risk.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="service-section" id="faq">
-      <div class="container">
-        <div class="section-label">FAQ</div>
-        <h2 class="section-title">Common implementation <em>questions</em></h2>
-        <div class="service-grid-2">
-          <article class="service-card-lite"><h3>Can this handle messy PDF formats?</h3><p>Yes, with schema-specific extraction prompts and confidence fallback rules.</p></article>
-          <article class="service-card-lite"><h3>What happens on low confidence?</h3><p>Records are quarantined to reviewer flow, not written into production systems.</p></article>
-          <article class="service-card-lite"><h3>Can we start with one document family?</h3><p>Yes. Starter scope is intentionally narrow for fast value and low rollout risk.</p></article>
-          <article class="service-card-lite"><h3>Can we add AI later?</h3><p>Yes. Rule-first extraction/validation can run before AI-assisted enrichment.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="service-cta-band">
-      <div class="container">
-        <div class="section-label">Next Step</div>
-        <h2 class="section-title">If your team is still retyping PDFs, this is your fastest <em>ops win</em></h2>
-        <div class="service-cta-row"><a href="#contact" class="btn-primary">Send Project Details</a><a href="#contact" class="btn-ghost">Book a Discovery Call</a></div>
-      </div>
-    </section>
-
-    <section class="cta-section" id="contact">
-      <div class="cta-glow"></div>
-      <div class="container"><div class="cta-content"><div class="cta-text"><div class="section-label">Send Scope</div><h2>Tell me your document flow and <em>output requirements</em></h2><p>I will reply with architecture options, timeline, and package range.</p><div class="cta-note">Use this form as the default entry point. Mention if you want an immediate call.</div></div><form id="leadForm" class="lead-form" autocomplete="on"><div class="form-group"><input type="text" id="name" name="name" required aria-required="true" autocomplete="name" placeholder=" "><label for="name">Your Name *</label></div><div class="form-group"><input type="email" id="email" name="email" required aria-required="true" autocomplete="email" placeholder=" "><label for="email">Email Address *</label></div><div class="form-group"><input type="text" id="company" name="company" autocomplete="organization" placeholder=" "><label for="company">Company (Optional)</label></div><div class="form-group"><textarea id="message" name="message" rows="4" placeholder=" "></textarea><label for="message">Document types + destination system</label></div><input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off"><button type="submit" class="btn-primary form-submit"><span class="btn-text">Send Project Details</span><span class="btn-loading" style="display:none;">Sending...</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button><div class="form-status" style="display:none;" role="alert" aria-live="polite"></div></form></div></div>
-    </section>
-  </main>
-
-  <footer class="footer"><div class="container"><div class="footer-left">&copy; 2026 Pavel Ugamoti. Agentic Architect.</div><ul class="footer-links"><li><a href="https://www.linkedin.com/in/pavel-ugamoti/" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="mailto:ugamochi.pavel@gmail.com">Email</a></li></ul></div></footer>
   <script type="module" src="../../js/service-page.js"></script>
 </body>
 </html>

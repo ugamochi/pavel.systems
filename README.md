@@ -23,8 +23,10 @@ python3 -m http.server 8000
 
 ```
 index.html
+book-discovery-call/
+  index.html          # dedicated discovery call booking intake page
 services/
-  */index.html        # dedicated service pages
+  */index.html        # lightweight shells rendered from shared service data
 css/
   styles.css          # imports
   base/               # variables, reset
@@ -33,7 +35,9 @@ css/
 js/
   main.js             # homepage module loader
   service-page.js     # service page module loader
-  modules/            # nav, theme, animations, form
+  book-call.js        # discovery call page loader
+  data/               # service content model
+  modules/            # nav, theme, animations, form, renderers, helpers
 assets/images/        # og-image + service visuals
 ```
 

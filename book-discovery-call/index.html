@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Discovery Call | Pavel Ugamoti</title>
+  <meta name="description" content="Book a discovery call for AI automation services and receive a scoped recommendation.">
+  <meta property="og:title" content="Book Discovery Call | Pavel Ugamoti">
+  <meta property="og:description" content="Book a discovery call for AI automation services and receive a scoped recommendation.">
+  <link rel="canonical" href="https://ugamochi.systems/book-discovery-call/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      var theme = saved !== null ? saved : pref;
+      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+  </script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="container">
+      <a href="../index.html" class="nav-logo" aria-label="Pavel Ugamoti homepage">pavel<span>.</span>systems</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#services">Services</a></li>
+        <li>
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </li>
+        <li><a href="#contact" class="nav-cta">Send Booking Request
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="service-page" id="main">
+    <section class="service-hero">
+      <div class="container service-hero-grid">
+        <div>
+          <a class="service-back-link" href="../index.html#services" aria-label="Back to services">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M13 8H3M7 4L3 8l4 4"/>
+            </svg>
+            Back to services
+          </a>
+          <div class="service-kicker">Discovery Call</div>
+          <h1 class="service-headline" id="bookingServiceName">General automation consulting</h1>
+          <p class="service-sub">Share your context and preferred times. I will confirm the best slot and attach a scoped agenda so the call is specific and productive.</p>
+          <div class="service-cta-row">
+            <a href="#contact" class="btn-primary">Send Booking Request</a>
+            <a href="mailto:ugamochi.pavel@gmail.com?subject=Discovery%20Call%20Request" class="btn-ghost">Email Directly</a>
+          </div>
+          <p class="service-note" id="bookingContext">No specific service selected. Share your scope and priorities.</p>
+        </div>
+        <div class="service-proof-grid">
+          <article class="service-proof"><div class="service-proof-value">30m</div><div class="service-proof-label">Focused discovery format</div></article>
+          <article class="service-proof"><div class="service-proof-value">Scoped</div><div class="service-proof-label">You get clear next-step recommendation</div></article>
+          <article class="service-proof"><div class="service-proof-value">Fast</div><div class="service-proof-label">Reply and confirmation within 24h</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="service-section" id="contact">
+      <div class="container">
+        <div class="section-label">Booking Intake</div>
+        <h2 class="section-title">Share scope, time windows, and constraints</h2>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-glow"></div>
+      <div class="container">
+        <div class="cta-content">
+          <div class="cta-text">
+            <div class="section-label">What to include</div>
+            <h2>Send enough context so we can skip generic discovery</h2>
+            <p>Current stack, business objective, where the bottleneck is, and what success should look like in 60-90 days.</p>
+            <div class="cta-note">If you prefer async first, this same form doubles as a scoped discovery request without scheduling pressure.</div>
+          </div>
+
+          <form id="leadForm" class="lead-form" autocomplete="on">
+            <div class="form-group">
+              <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" placeholder=" ">
+              <label for="name">Your Name *</label>
+            </div>
+            <div class="form-group">
+              <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" placeholder=" ">
+              <label for="email">Email Address *</label>
+            </div>
+            <div class="form-group">
+              <input type="text" id="company" name="company" autocomplete="organization" placeholder=" ">
+              <label for="company">Company (Optional)</label>
+            </div>
+            <div class="form-group">
+              <textarea id="message" name="message" rows="5" placeholder=" "></textarea>
+              <label for="message">Preferred times + scope context</label>
+            </div>
+
+            <input type="hidden" id="serviceRequested" name="service_requested" value="">
+            <input type="hidden" name="intent" value="book_discovery_call">
+            <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+
+            <button type="submit" class="btn-primary form-submit">
+              <span class="btn-text">Send Booking Request</span>
+              <span class="btn-loading" style="display:none;">Sending...</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
+            <div class="form-status" style="display:none;" role="alert" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">&copy; 2026 Pavel Ugamoti. Agentic Architect.</div>
+      <ul class="footer-links">
+        <li><a href="https://www.linkedin.com/in/pavel-ugamoti/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ugamochi.pavel@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script type="module" src="../js/book-call.js"></script>
+</body>
+</html>

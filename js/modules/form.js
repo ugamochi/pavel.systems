@@ -22,13 +22,17 @@ if (leadForm) {
     btnLoading.style.display = 'inline';
     formStatus.style.display = 'none';
 
+    const rawFields = Object.fromEntries(new FormData(leadForm).entries());
+    delete rawFields.website;
+
     // Prepare form data
     const formData = {
-      name: leadForm.name.value.trim(),
-      email: leadForm.email.value.trim(),
-      company: leadForm.company.value.trim(),
-      intent: leadForm.intent ? leadForm.intent.value : 'send_project_details',
-      message: leadForm.message.value.trim(),
+      ...rawFields,
+      name: (rawFields.name || '').trim(),
+      email: (rawFields.email || '').trim(),
+      company: (rawFields.company || '').trim(),
+      intent: rawFields.intent || 'send_project_details',
+      message: (rawFields.message || '').trim(),
       timestamp: new Date().toISOString(),
       source: window.location.pathname || 'ugamochi.systems',
       userAgent: navigator.userAgent,

@@ -1,32 +1,13 @@
 export function initServicePageEnhancements() {
-  injectBackToServicesLink();
   initSectionNavHighlight();
   initContactIntentCapture();
-}
-
-function injectBackToServicesLink() {
-  const heroCopyColumn = document.querySelector('.service-hero .container > div');
-  if (!heroCopyColumn || heroCopyColumn.querySelector('.service-back-link')) return;
-
-  const backLink = document.createElement('a');
-  backLink.className = 'service-back-link';
-  backLink.href = '../../index.html#services';
-  backLink.setAttribute('aria-label', 'Back to services list');
-  backLink.innerHTML = `
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <path d="M13 8H3M7 4L3 8l4 4"/>
-    </svg>
-    Back to all services
-  `;
-
-  heroCopyColumn.insertBefore(backLink, heroCopyColumn.firstChild);
 }
 
 function initSectionNavHighlight() {
   const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   if (!links.length) return;
 
-  const sectionIds = ['problem', 'process', 'faq'];
+  const sectionIds = ['problem', 'process', 'packages', 'faq'];
   const sections = sectionIds
     .map((id) => document.getElementById(id))
     .filter(Boolean);
@@ -91,17 +72,19 @@ function initContactIntentCapture() {
 
   setIntent('send_project_details');
 
-  document.querySelectorAll('.btn-primary, .nav-cta').forEach((button) => {
-    button.addEventListener('click', () => setIntent('send_project_details'));
-  });
-
-  document.querySelectorAll('.btn-ghost').forEach((button) => {
+  document.querySelectorAll('[data-intent], .btn-primary, .nav-cta, .btn-ghost').forEach((button) => {
     button.addEventListener('click', () => {
-      setIntent('book_discovery_call');
-      const message = form.querySelector('#message');
-      if (message && !message.value.trim()) {
-        message.value = 'Request: Book a discovery call.\nContext: ';
-        message.dispatchEvent(new Event('input', { bubbles: true }));
+      const intent = button.dataset.intent
+        || (button.classList.contains('btn-ghost') ? 'book_discovery_call' : 'send_project_details');
+      setIntent(intent);
+
+      const href = button.getAttribute('href');
+      if (intent === 'book_discovery_call' && href === '#contact') {
+        const message = form.querySelector('#message');
+        if (message && !message.value.trim()) {
+          message.value = 'Request: Book a discovery call.\nContext: ';
+          message.dispatchEvent(new Event('input', { bubbles: true }));
+        }
       }
     });
   });
