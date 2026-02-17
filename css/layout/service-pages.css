@@ -7,6 +7,9 @@
 
 .service-hero {
   padding: 5rem 0 3.5rem;
+  background:
+    radial-gradient(60rem 24rem at 85% -20%, var(--accent-glow), transparent 55%),
+    radial-gradient(44rem 20rem at 0% -10%, var(--hero-glow), transparent 52%);
   border-bottom: 1px solid transparent;
   border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
 }
@@ -32,6 +35,30 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 1.2rem;
+}
+
+.service-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.1rem;
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.service-back-link:hover {
+  color: var(--text-primary);
+  gap: 0.6rem;
+}
+
+.service-back-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .service-headline {
@@ -72,6 +99,12 @@
   box-shadow: var(--card-shadow);
   border-radius: 14px;
   padding: 1rem 1rem 0.95rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service-proof:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-accent-shadow);
 }
 
 .service-proof-value {
@@ -89,6 +122,7 @@
 
 .service-section {
   padding: 4.4rem 0;
+  scroll-margin-top: 7rem;
   border-top: 1px solid transparent;
   border-image: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent) 1;
 }
@@ -110,6 +144,12 @@
   box-shadow: var(--card-shadow);
   border-radius: 16px;
   padding: 1.2rem;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.service-card-lite:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-accent-shadow);
 }
 
 .service-card-lite h3 {
@@ -138,6 +178,12 @@
   box-shadow: var(--card-shadow);
   border-radius: 14px;
   padding: 1rem 1.1rem;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.service-step:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-accent-shadow);
 }
 
 .service-step-num {
@@ -204,6 +250,12 @@
   font-family: var(--mono);
   font-size: 0.74rem;
   color: var(--text-muted);
+  transition: box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.service-badges span:hover {
+  box-shadow: 0 0 0 1px var(--chip-hover-border);
+  color: var(--accent-light);
 }
 
 .service-pricing-note {

@@ -27,6 +27,7 @@ if (leadForm) {
       name: leadForm.name.value.trim(),
       email: leadForm.email.value.trim(),
       company: leadForm.company.value.trim(),
+      intent: leadForm.intent ? leadForm.intent.value : 'send_project_details',
       message: leadForm.message.value.trim(),
       timestamp: new Date().toISOString(),
       source: window.location.pathname || 'ugamochi.systems',
