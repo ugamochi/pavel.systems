@@ -7,22 +7,22 @@ A single-page portfolio website showcasing AI automation services for profession
 ## Features
 
 - **Modern Design**: Dark charcoal theme (#0b0b0b) with warm cream text (#e7e6d9) and subtle violet accent (#6236f4)
-- **AI-Powered Contact Form**: Lead capture with planned AI qualification pipeline
+- **AI-Powered Contact Form**: Lead capture with AI qualification pipeline (n8n stages 1-4 built)
 - **GSAP Animations**: Scroll-triggered reveals, count-up numbers, parallax glow, staggered cards
 - **Fully Responsive**: Breakpoints at 1024px, 768px, and 480px with mobile hamburger nav
 - **Accessibility**: Skip links, ARIA labels, keyboard nav, prefers-reduced-motion, WCAG AA contrast
-- **Performance**: Single-file architecture, no build step, ~80KB HTML
+- **Performance**: Modular architecture, no build step, ~34KB HTML
 
 ## Tech Stack
 
 **Frontend:**
 - Pure HTML5, CSS3, JavaScript (no framework)
 - GSAP 3.12.5 + ScrollTrigger for animations
-- Google Fonts: Inter, JetBrains Mono
+- Google Fonts: Geist, JetBrains Mono
 - CSS Custom Properties for theming
 
-**Backend (Contact Form - Planned):**
-- n8n for workflow automation
+**Backend (Contact Form):**
+- n8n for workflow automation (4 stages deployed)
 - Gmail for email notifications
 - Google Sheets for lead tracking
 - OpenAI/Anthropic API for AI lead scoring
@@ -59,14 +59,7 @@ pavel.systems/
 │   └── images/
 │       ├── og-image.svg    # Social preview
 │       └── og-image.html   # PNG source
-├── netlify.toml            # Deploy config
-├── docs/
-│   └── N8N_SETUP_STAGE1.md # n8n setup guide
-└── n8n-workflows/          # (To be created)
-    ├── stage-1-basic.json
-    ├── stage-2-sheets.json
-    ├── stage-3-ai-scoring.json
-    └── stage-4-automated.json
+└── netlify.toml            # Deploy config
 ```
 
 ## Quick Start
@@ -99,12 +92,12 @@ This is a static HTML website with no build dependencies. Modular architecture w
 
 ## Contact Form Setup
 
-The contact form is currently in development mode. To enable it:
+The contact form pipeline has 4 stages built. To set up:
 
 ### Stage 1: Basic Email Notifications
 
-- **Local n8n:** [docs/N8N_LOCAL_QUICKSTART.md](docs/N8N_LOCAL_QUICKSTART.md) — use with `n8n start`; form is already pointed at `http://localhost:5678/webhook/lead-form`.
-- **Full walkthrough (cloud or local):** [docs/N8N_SETUP_STAGE1.md](docs/N8N_SETUP_STAGE1.md).
+- **Local n8n:** [../n8n/guides/N8N_LOCAL_QUICKSTART.md](../n8n/guides/N8N_LOCAL_QUICKSTART.md) — use with `n8n start`; form is already pointed at `http://localhost:5678/webhook/lead-form`.
+- **Full walkthrough (cloud or local):** [../n8n/guides/N8N_SETUP_STAGE1.md](../n8n/guides/N8N_SETUP_STAGE1.md).
 
 **Quick summary:**
 1. Run n8n (local: `n8n start` — or create n8n cloud account at https://cloud.n8n.io)
@@ -115,10 +108,10 @@ The contact form is currently in development mode. To enable it:
 
 ### Stage 2-4: Advanced Features
 
-See `docs/FORM_SETUP.md` (to be created) for:
-- Google Sheets integration
-- AI lead scoring
-- Automated personalized responses
+Workflow JSONs and deploy scripts are in `../n8n/`:
+- **Stage 2**: Google Sheets lead tracking
+- **Stage 3**: AI lead scoring with conditional routing
+- **Stage 4**: Automated personalized responses + spam gate
 
 ## Deployment
 
@@ -207,7 +200,7 @@ Copyright 2026 Pavel Ugamoti. All rights reserved.
 - [x] Contact form UI
 - [x] Update social links
 - [x] UI/UX audit + color scheme overhaul
-- [x] n8n webhook setup (guide ready: `docs/N8N_SETUP_STAGE1.md`)
+- [x] n8n webhook setup (guide ready: `../n8n/guides/N8N_SETUP_STAGE1.md`)
 - [x] Email notifications
 - [x] Deploy to production
 
