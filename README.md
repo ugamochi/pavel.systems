@@ -1,6 +1,6 @@
 # ugamochi.systems
 
-A single-page portfolio website showcasing AI automation services for professional services businesses.
+A portfolio website for AI automation services with a homepage and dedicated service detail pages.
 
 ## Stack
 
@@ -23,15 +23,18 @@ python3 -m http.server 8000
 
 ```
 index.html
+services/
+  */index.html        # dedicated service pages
 css/
   styles.css          # imports
   base/               # variables, reset
   components/         # nav, forms, section headers
-  layout/             # hero, sections, cta, footer, animations, responsive
+  layout/             # hero, sections, service-pages, cta, footer, animations, responsive
 js/
-  main.js             # module loader
+  main.js             # homepage module loader
+  service-page.js     # service page module loader
   modules/            # nav, theme, animations, form
-assets/images/        # og-image
+assets/images/        # og-image + service visuals
 ```
 
 ## Current Services On Website

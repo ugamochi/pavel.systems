@@ -10,6 +10,7 @@
 /* Layout */
 @import 'layout/hero.css';
 @import 'layout/sections.css';
+@import 'layout/service-pages.css';
 @import 'layout/cta.css';
 @import 'layout/footer.css';
 @import 'layout/animations.css';

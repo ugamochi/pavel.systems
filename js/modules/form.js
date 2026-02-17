@@ -29,7 +29,7 @@ if (leadForm) {
       company: leadForm.company.value.trim(),
       message: leadForm.message.value.trim(),
       timestamp: new Date().toISOString(),
-      source: 'ugamochi.systems',
+      source: window.location.pathname || 'ugamochi.systems',
       userAgent: navigator.userAgent,
       referrer: document.referrer || 'direct'
     };

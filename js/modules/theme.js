@@ -1,6 +1,8 @@
 export function initTheme() {
 // Theme toggle
-document.getElementById('themeToggle').addEventListener('click', () => {
+const toggle = document.getElementById('themeToggle');
+if (!toggle) return;
+toggle.addEventListener('click', () => {
   var isLight = document.documentElement.getAttribute('data-theme') === 'light';
   var next = isLight ? 'dark' : 'light';
   if (next === 'light') {
