@@ -26,7 +26,7 @@ index.html
 book-discovery-call/
   index.html          # dedicated discovery call booking intake page
 services/
-  */index.html        # lightweight shells rendered from shared service data
+  */index.html        # statically generated service pages from shared service data
 css/
   styles.css          # imports
   base/               # variables, reset
@@ -39,7 +39,21 @@ js/
   data/               # service content model
   modules/            # nav, theme, animations, form, renderers, helpers
 assets/images/        # og-image + service visuals
+tools/
+  generate-service-pages.mjs
+  validate-service-pages.mjs
 ```
+
+## Content Workflow
+
+Service pages are generated from `js/data/service-pages.js` via the shared renderer.
+
+```bash
+node tools/generate-service-pages.mjs
+node tools/validate-service-pages.mjs
+```
+
+Run both commands before deploying to GitHub Pages.
 
 ## Current Services On Website
 

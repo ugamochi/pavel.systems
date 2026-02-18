@@ -3,11 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Service | Pavel Ugamoti</title>
-  <meta name="description" content="Service implementation page for AI automation systems.">
-  <meta property="og:title" content="Service | Pavel Ugamoti">
-  <meta property="og:description" content="Service implementation page for AI automation systems.">
-  <link rel="canonical" id="canonicalLink" href="">
+  <title>Document Intelligence (PDF-to-Data) | Pavel Ugamoti</title>
+  <meta name="description" content="Automate PDF extraction into structured records with validation, exception handling, and client-owned infrastructure.">
+  <meta name="author" content="Pavel Ugamoti">
+  <meta name="color-scheme" content="light dark">
+  <link rel="canonical" id="canonicalLink" href="https://ugamochi.github.io/ugamochi.systems/services/document-intelligence-pdf-to-data/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%236236f4'/%3E%3Ctext x='50' y='72' font-size='60' font-family='system-ui' font-weight='700' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
+  <meta property="og:title" content="Document Intelligence (PDF-to-Data) | Pavel Ugamoti">
+  <meta property="og:description" content="Automate PDF extraction into structured records with validation, exception handling, and client-owned infrastructure.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ugamochi.github.io/ugamochi.systems/services/document-intelligence-pdf-to-data/">
+  <meta property="og:image" content="https://ugamochi.github.io/ugamochi.systems/assets/images/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Document Intelligence (PDF-to-Data) | Pavel Ugamoti">
+  <meta name="twitter:description" content="Automate PDF extraction into structured records with validation, exception handling, and client-owned infrastructure.">
+  <meta name="twitter:image" content="https://ugamochi.github.io/ugamochi.systems/assets/images/og-image.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,10 +28,16 @@
       var saved = localStorage.getItem('theme');
       var pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
       var theme = saved !== null ? saved : pref;
-      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
     })();
   </script>
   <link rel="stylesheet" href="../../css/styles.css">
+  <style id="service-theme-vars">:root { --accent: #0ea5e9; --accent-light: #38bdf8; --accent-dim: rgba(14, 165, 233, 0.34); --accent-glow: rgba(14, 165, 233, 0.09); --hero-glow: rgba(14, 165, 233, 0.11); --accent-pale: rgba(14, 165, 233, 0.08); --accent-soft: rgba(14, 165, 233, 0.12); --chip-hover-bg: rgba(14, 165, 233, 0.1); --chip-hover-border: rgba(14, 165, 233, 0.24); --card-accent-shadow: 0 0 0 1px rgba(14, 165, 233, 0.24), 0 8px 32px rgba(14, 165, 233, 0.14); --faq-glow: rgba(14, 165, 233, 0.06); }</style>
+  <script id="faq-schema-jsonld" type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can this handle variable PDF formats?","acceptedAnswer":{"@type":"Answer","text":"Yes. Flows are designed per document family with fallback handling for unknown layouts."}},{"@type":"Question","name":"What happens on low confidence extraction?","acceptedAnswer":{"@type":"Answer","text":"Records are routed to exception review and blocked from auto-write until approved."}},{"@type":"Question","name":"Can we start small?","acceptedAnswer":{"@type":"Answer","text":"Yes. Starter scope is intentionally narrow for faster ROI and safer rollout."}},{"@type":"Question","name":"Can this feed our existing system?","acceptedAnswer":{"@type":"Answer","text":"Yes. Destination adapters are configured around your existing stack."}}]}</script>
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
@@ -29,6 +47,7 @@
       <a href="../../index.html" class="nav-logo" aria-label="Pavel Ugamoti homepage">pavel<span>.</span>systems</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../index.html#services">Services</a></li>
         <li><a href="#problem">Problem</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#packages">Packages</a></li>
@@ -39,7 +58,7 @@
             <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           </button>
         </li>
-        <li><a href="#contact" class="nav-cta">Send Project Details
+        <li><a href="../../book-discovery-call/?service=document-intelligence-pdf-to-data" class="nav-cta" data-intent="book_discovery_call">Book Discovery Call
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
         </a></li>
       </ul>
@@ -49,7 +68,401 @@
     </div>
   </nav>
 
-  <main class="service-page" id="main" data-service-slug="document-intelligence-pdf-to-data"></main>
+  <main class="service-page" id="main" data-service-slug="document-intelligence-pdf-to-data">
+
+        <section class="service-hero service-anim">
+          <div class="container service-hero-grid">
+            <div>
+              <a class="service-back-link" href="../../index.html#services" aria-label="Back to all services">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M13 8H3M7 4L3 8l4 4"/>
+                </svg>
+                Back to all services
+              </a>
+              <div class="service-kicker">Service 02</div>
+              <h1 class="service-headline">Document Intelligence (PDF-to-Data)</h1>
+              <p class="service-sub">Convert unstructured PDFs into clean, validated data flows so operations stop retyping and start scaling.</p>
+              <div class="service-cta-row">
+                <a href="#contact" class="btn-primary" data-intent="send_project_details">Send Project Details</a>
+                <a href="../../book-discovery-call/?service=document-intelligence-pdf-to-data" class="btn-ghost" data-intent="book_discovery_call">Book Discovery Call</a>
+              </div>
+              <p class="service-note">Pricing range: Starter <strong>EUR 2,000-3,500</strong> · Growth <strong>EUR 4,500-7,500</strong> · Scale <strong>EUR 9,000+</strong>. Final quote after discovery.</p>
+            </div>
+
+            <aside class="service-rail">
+              <div class="service-proof-grid">
+                
+                  <article class="service-proof">
+                    <div class="service-proof-value">90%</div>
+                    <div class="service-proof-label">Reduction in manual data entry effort</div>
+                  </article>
+                
+                  <article class="service-proof">
+                    <div class="service-proof-value">Faster</div>
+                    <div class="service-proof-label">Turnaround from document arrival to usable records</div>
+                  </article>
+                
+                  <article class="service-proof">
+                    <div class="service-proof-value">Safer</div>
+                    <div class="service-proof-label">Validation and exception gates before write operations</div>
+                  </article>
+                
+              </div>
+
+              <div class="service-summary-card">
+                <h3>Quick Navigation</h3>
+                <ul class="service-summary-links">
+                  <li><a href="#problem">Problem</a></li>
+                  <li><a href="#process">Process</a></li>
+                  <li><a href="#proof">Proof</a></li>
+                  <li><a href="#packages">Packages</a></li>
+                  <li><a href="#faq">FAQ</a></li>
+                </ul>
+                <div class="service-summary-cta">
+                  <a href="#contact" class="btn-primary" data-intent="send_project_details">Send Details</a>
+                  <a href="../../book-discovery-call/?service=document-intelligence-pdf-to-data" class="service-summary-book" data-intent="book_discovery_call">Book Discovery Call</a>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      
+
+        <section class="service-section service-anim" id="problem">
+          <div class="container">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Manual extraction becomes the growth bottleneck</h2>
+            <div class="service-grid-3">
+              
+                <article class="service-card-lite">
+                  <h3>Repetitive keying</h3>
+                  <p>Teams re-enter the same fields by hand across multiple systems.</p>
+                </article>
+              
+                <article class="service-card-lite">
+                  <h3>Format variance</h3>
+                  <p>Document layouts differ by vendor and break brittle workflows.</p>
+                </article>
+              
+                <article class="service-card-lite">
+                  <h3>Silent errors</h3>
+                  <p>Bad records slip into downstream systems and create hidden operational risk.</p>
+                </article>
+              
+            </div>
+          </div>
+        </section>
+      
+
+
+        <section class="service-section service-anim" id="process">
+          <div class="container">
+            <div class="section-label">How It Works</div>
+            <h2 class="section-title">Ingest -&gt; Extract -&gt; Validate -&gt; Sync</h2>
+            <div class="service-step-list">
+              
+                <article class="service-step">
+                  <div class="service-step-num">01</div>
+                  <div>
+                    <h4>Document mapping</h4>
+                    <p>Define schemas, required fields, and quality thresholds by document type.</p>
+                  </div>
+                </article>
+              
+                <article class="service-step">
+                  <div class="service-step-num">02</div>
+                  <div>
+                    <h4>Extraction workflow</h4>
+                    <p>Apply AI and deterministic parsers to convert PDFs into structured payloads.</p>
+                  </div>
+                </article>
+              
+                <article class="service-step">
+                  <div class="service-step-num">03</div>
+                  <div>
+                    <h4>Validation layer</h4>
+                    <p>Run business rules and confidence checks before writing to destination systems.</p>
+                  </div>
+                </article>
+              
+                <article class="service-step">
+                  <div class="service-step-num">04</div>
+                  <div>
+                    <h4>Exception handling</h4>
+                    <p>Route uncertain outputs to human review with clear retry paths.</p>
+                  </div>
+                </article>
+              
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="service-section service-anim" id="fit">
+          <div class="container service-grid-2">
+            <div class="fit-card">
+              <div class="section-label">Fit Check</div>
+              <h2 class="section-title">Who this is for</h2>
+              <div class="service-fit-grid">
+                <div>
+                  <h3 class="fit-heading">Good fit</h3>
+                  <ul class="service-list">
+                    <li>Operations teams processing recurring invoices, contracts, or intake PDFs</li><li>Back-office processes where accuracy and auditability matter</li><li>Businesses moving from manual handling to structured automation</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 class="fit-heading">Probably not a fit</h3>
+                  <ul class="service-list fit-list-not">
+                    <li>Teams with one-off document flows and no recurring volume</li><li>Cases with no clear destination schema</li><li>Workflows that skip human review entirely for low-confidence records</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="outcomes">
+              <div class="section-label">Expected Outcomes</div>
+              <h2 class="section-title">What should improve in the first <em>90 days</em></h2>
+              <div class="service-outcome-grid">
+                
+                  <article class="service-outcome">
+                    <p>Faster document processing with predictable latency</p>
+                  </article>
+                
+                  <article class="service-outcome">
+                    <p>Lower human error rates before database/CRM write</p>
+                  </article>
+                
+                  <article class="service-outcome">
+                    <p>Operational visibility on failure and exception cases</p>
+                  </article>
+                
+              </div>
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="service-section service-anim" id="deliverables">
+          <div class="container service-grid-2">
+            <div>
+              <div class="section-label">Deliverables</div>
+              <h2 class="section-title">What you actually <em>get</em></h2>
+              <ul class="service-list">
+                <li>Source ingestion workflow</li><li>Extraction prompts/templates by document family</li><li>Validation and confidence scoring gates</li><li>Exception queue and reviewer flow</li><li>Destination sync to target systems</li><li>Runbook and handover materials</li>
+              </ul>
+            </div>
+            <div>
+              <div class="section-label">Integrations</div>
+              <h2 class="section-title">Built on your current stack</h2>
+              <div class="service-badges">
+                <span>Google Drive</span><span>n8n</span><span>Claude/OpenAI vision</span><span>Airtable/CRM</span><span>Sheets</span><span>Databases</span>
+              </div>
+              <div class="service-pricing-note">Client-owned credentials and storage from day one. No shared-secret dependency risk.</div>
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="service-section service-proof-section service-anim" id="proof">
+          <div class="container">
+            <div class="section-label">Client Proof</div>
+            <h2 class="section-title">Performance patterns seen after deployment</h2>
+            <div class="service-grid-3">
+              
+                <article class="service-card-lite service-proof-card">
+                  <h3>90%</h3>
+                  <p>Reduction in manual data entry effort</p>
+                </article>
+              
+                <article class="service-card-lite service-proof-card">
+                  <h3>Faster</h3>
+                  <p>Turnaround from document arrival to usable records</p>
+                </article>
+              
+                <article class="service-card-lite service-proof-card">
+                  <h3>Safer</h3>
+                  <p>Validation and exception gates before write operations</p>
+                </article>
+              
+            </div>
+            <div class="service-grid-2 service-testimonial-grid">
+              
+                <article class="service-testimonial-card">
+                  <div class="service-testimonial-quote">&ldquo;</div>
+                  <blockquote>We went from 3-day client onboarding to same-day. Pavel redesigned the workflow so automation matched how the team actually works.</blockquote>
+                  <div class="service-testimonial-meta">
+                    <div class="service-testimonial-author">Managing Partner</div>
+                    <div class="service-testimonial-role">Mid-size Law Firm</div>
+                  </div>
+                </article>
+              
+                <article class="service-testimonial-card">
+                  <div class="service-testimonial-quote">&ldquo;</div>
+                  <blockquote>Support tickets dropped by 60% in the first month. Routine requests are handled automatically and escalated only when needed.</blockquote>
+                  <div class="service-testimonial-meta">
+                    <div class="service-testimonial-author">Head of Operations</div>
+                    <div class="service-testimonial-role">Digital Marketing Agency</div>
+                  </div>
+                </article>
+              
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="service-section service-anim" id="packages">
+          <div class="container">
+            <div class="section-label">Packages</div>
+            <h2 class="section-title">Choose based on scope and operational complexity</h2>
+            <div class="package-grid">
+              
+                <article class="package-card">
+                  <div class="package-name">Starter</div>
+                  <div class="package-price">EUR 2,000-3,500</div>
+                  <div class="package-meta">Typical timeline: 1-2 weeks</div>
+                  <p class="package-for">One document family with controlled output schema</p>
+                  <ul class="service-list package-list">
+                    <li>Single-source ingest</li><li>Core extraction</li><li>Basic validation</li><li>Destination write</li>
+                  </ul>
+                </article>
+              
+                <article class="package-card">
+                  <div class="package-name">Growth</div>
+                  <div class="package-price">EUR 4,500-7,500</div>
+                  <div class="package-meta">Typical timeline: 2-4 weeks</div>
+                  <p class="package-for">Multiple document families and exception handling</p>
+                  <ul class="service-list package-list">
+                    <li>Multi-schema extraction</li><li>Confidence routing</li><li>Reviewer queue</li><li>Operational dashboard</li>
+                  </ul>
+                </article>
+              
+                <article class="package-card">
+                  <div class="package-name">Scale</div>
+                  <div class="package-price">EUR 9,000+</div>
+                  <div class="package-meta">Typical timeline: 4+ weeks</div>
+                  <p class="package-for">High-volume document operations with governance needs</p>
+                  <ul class="service-list package-list">
+                    <li>Advanced validation</li><li>Monitoring + alerts</li><li>Versioned extraction rules</li><li>Team enablement</li>
+                  </ul>
+                </article>
+              
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="faq service-faq service-anim" id="faq">
+          <div class="container">
+            <div class="section-label">FAQ</div>
+            <h2 class="section-title">Before implementation</h2>
+            <div class="faq-grid">
+              <div class="faq-list">
+                
+        <article class="faq-item service-faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can this handle variable PDF formats?
+            <div class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Flows are designed per document family with fallback handling for unknown layouts.</p>
+          </div>
+        </article>
+      
+        <article class="faq-item service-faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What happens on low confidence extraction?
+            <div class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </button>
+          <div class="faq-answer">
+            <p>Records are routed to exception review and blocked from auto-write until approved.</p>
+          </div>
+        </article>
+      
+              </div>
+              <div class="faq-list">
+                
+        <article class="faq-item service-faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can we start small?
+            <div class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Starter scope is intentionally narrow for faster ROI and safer rollout.</p>
+          </div>
+        </article>
+      
+        <article class="faq-item service-faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can this feed our existing system?
+            <div class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Destination adapters are configured around your existing stack.</p>
+          </div>
+        </article>
+      
+              </div>
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="service-cta-band service-anim">
+          <div class="container">
+            <div class="section-label">Next Step</div>
+            <h2 class="section-title">If your team still retypes PDFs, this is usually the fastest operational win available.</h2>
+            <div class="service-cta-row">
+              <a href="#contact" class="btn-primary" data-intent="send_project_details">Send Project Details</a>
+              <a href="../../book-discovery-call/?service=document-intelligence-pdf-to-data" class="btn-ghost" data-intent="book_discovery_call">Book Discovery Call</a>
+            </div>
+          </div>
+        </section>
+      
+
+        <section class="cta-section service-anim" id="contact">
+          <div class="cta-glow"></div>
+          <div class="container">
+            <div class="cta-content">
+              <div class="cta-text">
+                <div class="section-label">Send Scope</div>
+                <h2>Tell me your document flow and output requirements</h2>
+                <p>I will reply with architecture options, timeline, and package range.</p>
+                <div class="cta-note">If you prefer live scoping, use the booking path after submitting requirements.</div>
+                <a href="../../book-discovery-call/?service=document-intelligence-pdf-to-data" class="service-book-link" data-intent="book_discovery_call">Prefer live scoping? Book a discovery call.</a>
+              </div>
+
+              <form id="leadForm" class="lead-form" autocomplete="on">
+                <div class="form-group">
+                  <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" placeholder=" ">
+                  <label for="name">Your Name *</label>
+                </div>
+                <div class="form-group">
+                  <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" placeholder=" ">
+                  <label for="email">Email Address *</label>
+                </div>
+                <div class="form-group">
+                  <input type="text" id="company" name="company" autocomplete="organization" placeholder=" ">
+                  <label for="company">Company (Optional)</label>
+                </div>
+                <div class="form-group">
+                  <textarea id="message" name="message" rows="4" placeholder=" " aria-label="Document types + destination system"></textarea>
+                  <label for="message">Document types + destination system</label>
+                  <span class="form-hint">What document types and fields do you need to extract?</span>
+                </div>
+                <input type="hidden" name="intent" value="send_project_details">
+                <input type="hidden" name="service_requested" value="Document Intelligence (PDF-to-Data)">
+                <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+                <button type="submit" class="btn-primary form-submit">
+                  <span class="btn-text">Send Project Details</span>
+                  <span class="btn-loading" style="display:none;">Sending...</span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                </button>
+                <div class="form-status" style="display:none;" role="alert" aria-live="polite"></div>
+              </form>
+            </div>
+          </div>
+        </section>
+      
+  </main>
 
   <footer class="footer">
     <div class="container">

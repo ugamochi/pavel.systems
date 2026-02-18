@@ -7,7 +7,7 @@ function initSectionNavHighlight() {
   const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   if (!links.length) return;
 
-  const sectionIds = ['problem', 'process', 'packages', 'faq'];
+  const sectionIds = ['problem', 'process', 'proof', 'packages', 'faq'];
   const sections = sectionIds
     .map((id) => document.getElementById(id))
     .filter(Boolean);
@@ -72,13 +72,12 @@ function initContactIntentCapture() {
 
   setIntent('send_project_details');
 
-  document.querySelectorAll('[data-intent], .btn-primary, .nav-cta, .btn-ghost').forEach((button) => {
-    button.addEventListener('click', () => {
-      const intent = button.dataset.intent
-        || (button.classList.contains('btn-ghost') ? 'book_discovery_call' : 'send_project_details');
+  document.querySelectorAll('[data-intent], a[href="#contact"], .form-submit').forEach((element) => {
+    element.addEventListener('click', () => {
+      const intent = element.dataset.intent || (element.classList.contains('btn-ghost') ? 'book_discovery_call' : 'send_project_details');
       setIntent(intent);
 
-      const href = button.getAttribute('href');
+      const href = element.getAttribute('href');
       if (intent === 'book_discovery_call' && href === '#contact') {
         const message = form.querySelector('#message');
         if (message && !message.value.trim()) {
