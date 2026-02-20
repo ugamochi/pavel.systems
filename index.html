@@ -563,7 +563,7 @@
           <p>Book a free 30-minute strategy call. I'll map your highest-ROI automation opportunity and give you a concrete plan — whether you hire me or not.</p>
           <div class="cta-note">No commitment. No pitch deck. Just a conversation about what's possible.</div>
         </div>
-        <form id="leadForm" class="lead-form" autocomplete="on">
+        <form id="leadForm" class="lead-form" autocomplete="on" method="post" action="#" onsubmit="return false;">
           <div class="form-group">
             <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" placeholder=" " aria-label="Your name">
             <label for="name">Your Name *</label>
@@ -614,6 +614,18 @@
   </footer>
 
   <!-- ═══════════ SCRIPTS ═══════════ -->
+  <!-- Safety net: if ES modules fail to load, reveal all hidden sections after 4s -->
+  <script>
+    setTimeout(function() {
+      if (!document.documentElement.classList.contains('reveal-ready')) {
+        document.querySelectorAll('.reveal').forEach(function(el) {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          el.style.animation = 'none';
+        });
+      }
+    }, 4000);
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script type="module" src="js/main.js"></script>
