@@ -1,10 +1,24 @@
 /* ═══════════════════════════════════════
    SCROLL ANIMATIONS
 ═══════════════════════════════════════ */
+
+/* CSS-only safety net: auto-reveal after 2.5s if JS never runs.
+   GSAP cancels this animation on init via .reveal-ready class. */
+@keyframes revealSafety {
+  to { opacity: 1; transform: none; }
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(32px);
   transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  animation: revealSafety 0.6s ease 2.5s both;
+}
+
+/* GSAP-managed: cancel CSS fallback when JS has taken control */
+.reveal-ready .reveal,
+.reveal.js-revealed {
+  animation: none;
 }
 
 .reveal.visible {
@@ -30,7 +44,7 @@
 .reveal.visible > div > :nth-child(6) { animation-delay: 0.40s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; }
+  .reveal { opacity: 1; transform: none; animation: none; }
 }
 
 /* Skip to content (a11y) */
