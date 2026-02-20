@@ -5,10 +5,17 @@ import { initForm } from './modules/form.js';
 import { initServiceCards } from './modules/service-cards.js';
 import { initFaq } from './modules/faq.js';
 
-// Initialize all modules
-initNav();
-initTheme();
-initAnimations();
-initForm();
-initServiceCards();
-initFaq();
+function safeInit(name, initializer) {
+  try {
+    initializer();
+  } catch (error) {
+    console.error(`[init] ${name} failed`, error);
+  }
+}
+
+safeInit('nav', initNav);
+safeInit('theme', initTheme);
+safeInit('form', initForm);
+safeInit('animations', initAnimations);
+safeInit('service-cards', initServiceCards);
+safeInit('faq', initFaq);

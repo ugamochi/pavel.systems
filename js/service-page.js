@@ -6,10 +6,18 @@ import { initServicePageEnhancements } from './modules/service-page-enhancements
 import { initServicePageAnimations } from './modules/service-page-animations.js';
 import { renderServicePage } from './modules/service-page-renderer.js';
 
-renderServicePage();
-initNav();
-initTheme();
-initForm();
-initFaq();
-initServicePageEnhancements();
-initServicePageAnimations();
+function safeInit(name, initializer) {
+  try {
+    initializer();
+  } catch (error) {
+    console.error(`[init] ${name} failed`, error);
+  }
+}
+
+safeInit('service-renderer', renderServicePage);
+safeInit('nav', initNav);
+safeInit('theme', initTheme);
+safeInit('form', initForm);
+safeInit('faq', initFaq);
+safeInit('service-enhancements', initServicePageEnhancements);
+safeInit('service-animations', initServicePageAnimations);

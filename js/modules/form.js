@@ -1,31 +1,45 @@
-export function initForm() {
-// ─── Lead Form Submission ───
-const leadForm = document.getElementById('leadForm');
-if (leadForm) {
-  leadForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+const WEBHOOK_URL = 'https://n8n-service-uwaf.onrender.com/webhook/lead-form';
+const REQUEST_TIMEOUT_MS = 10000;
 
-    // Check honeypot field
-    if (leadForm.website.value) {
+export function initForm() {
+  const leadForm = document.getElementById('leadForm');
+  if (!leadForm || leadForm.dataset.formInit === 'true') return;
+  leadForm.dataset.formInit = 'true';
+
+  const btn = leadForm.querySelector('.form-submit');
+  const btnText = btn?.querySelector('.btn-text');
+  const btnLoading = btn?.querySelector('.btn-loading');
+  const formStatus = leadForm.querySelector('.form-status');
+  const emailInput = leadForm.querySelector('input[name="email"]');
+  const honeypotInput = leadForm.querySelector('input[name="website"]');
+
+  const setLoadingState = (isLoading) => {
+    if (btn) btn.disabled = isLoading;
+    if (btnText) btnText.style.display = isLoading ? 'none' : 'inline';
+    if (btnLoading) btnLoading.style.display = isLoading ? 'inline' : 'none';
+  };
+
+  const setStatus = (status, messageHtml) => {
+    if (!formStatus) return;
+    formStatus.className = `form-status ${status}`;
+    formStatus.innerHTML = messageHtml;
+    formStatus.style.display = 'block';
+  };
+
+  leadForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (honeypotInput?.value?.trim()) {
       console.log('Bot detected via honeypot field');
-      return; // Silent fail for bots
+      return;
     }
 
-    const btn = leadForm.querySelector('.form-submit');
-    const btnText = btn.querySelector('.btn-text');
-    const btnLoading = btn.querySelector('.btn-loading');
-    const formStatus = leadForm.querySelector('.form-status');
-
-    // Show loading state
-    btn.disabled = true;
-    btnText.style.display = 'none';
-    btnLoading.style.display = 'inline';
-    formStatus.style.display = 'none';
+    if (formStatus) formStatus.style.display = 'none';
+    setLoadingState(true);
 
     const rawFields = Object.fromEntries(new FormData(leadForm).entries());
     delete rawFields.website;
 
-    // Prepare form data
     const formData = {
       ...rawFields,
       name: (rawFields.name || '').trim(),
@@ -39,65 +53,59 @@ if (leadForm) {
       referrer: document.referrer || 'direct'
     };
 
-    try {
-      // Production: n8n on Render
-      const webhookUrl = 'https://n8n-service-uwaf.onrender.com/webhook/lead-form';
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const timeoutId = controller
+      ? window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+      : null;
 
-      if (!webhookUrl || webhookUrl.startsWith('YOUR_')) {
-        console.log('Form data (dev mode):', formData);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      if (!WEBHOOK_URL || WEBHOOK_URL.startsWith('YOUR_')) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         throw new Error('n8n webhook not configured yet');
       }
 
-      const response = await fetch(webhookUrl, {
+      const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        signal: controller?.signal
       });
 
-      if (response.ok) {
-        // Success
-        formStatus.className = 'form-status success';
-        formStatus.innerHTML = '✓ Thanks! I\'ll review your request and reach out within 24 hours.';
-        formStatus.style.display = 'block';
-        leadForm.reset();
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
+      }
 
-        // Track conversion if analytics present
-        if (typeof plausible !== 'undefined') {
-          plausible('Lead Submitted', { props: { company: formData.company || 'none' } });
-        }
-      } else {
-        throw new Error('Server returned ' + response.status);
+      setStatus('success', '✓ Thanks! I\'ll review your request and reach out within 24 hours.');
+      leadForm.reset();
+
+      if (typeof window.plausible === 'function') {
+        window.plausible('Lead Submitted', { props: { company: formData.company || 'none' } });
       }
     } catch (error) {
-      // Error handling
       console.error('Form submission error:', error);
-      formStatus.className = 'form-status error';
 
-      if (error.message.includes('webhook not configured')) {
-        formStatus.innerHTML = '⚠️ Form backend not yet configured. Please contact me at <a href="mailto:ugamochi.pavel@gmail.com" style="color: var(--warm); text-decoration: underline;">ugamochi.pavel@gmail.com</a>';
+      if (error instanceof Error && error.name === 'AbortError') {
+        setStatus('error', '⚠️ Request timed out. Please try again or email me directly at <a href="mailto:ugamochi.pavel@gmail.com" style="color: var(--warm); text-decoration: underline;">ugamochi.pavel@gmail.com</a>');
+      } else if (error instanceof Error && error.message.includes('webhook not configured')) {
+        setStatus('error', '⚠️ Form backend not yet configured. Please contact me at <a href="mailto:ugamochi.pavel@gmail.com" style="color: var(--warm); text-decoration: underline;">ugamochi.pavel@gmail.com</a>');
       } else {
-        formStatus.innerHTML = '⚠️ Submission failed. Please email me directly at <a href="mailto:ugamochi.pavel@gmail.com" style="color: var(--warm); text-decoration: underline;">ugamochi.pavel@gmail.com</a>';
+        setStatus('error', '⚠️ Submission failed. Please email me directly at <a href="mailto:ugamochi.pavel@gmail.com" style="color: var(--warm); text-decoration: underline;">ugamochi.pavel@gmail.com</a>');
       }
-
-      formStatus.style.display = 'block';
     } finally {
-      // Reset button state
-      btn.disabled = false;
-      btnText.style.display = 'inline';
-      btnLoading.style.display = 'none';
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+      setLoadingState(false);
     }
   });
 
-  // Basic client-side validation
-  leadForm.email.addEventListener('blur', function() {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (this.value && !emailRegex.test(this.value)) {
-      this.setCustomValidity('Please enter a valid email address');
-      this.reportValidity();
-    } else {
-      this.setCustomValidity('');
-    }
-  });
-}
+  if (emailInput) {
+    emailInput.addEventListener('blur', function () {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (this.value && !emailRegex.test(this.value)) {
+        this.setCustomValidity('Please enter a valid email address');
+        this.reportValidity();
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+  }
 }

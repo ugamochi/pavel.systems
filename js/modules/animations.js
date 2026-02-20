@@ -1,9 +1,10 @@
 export function initAnimations() {
 // ─── GSAP Animations (respects reduced motion) ───
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hasGsap = typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
 
-if (!prefersReduced) {
-  gsap.registerPlugin(ScrollTrigger);
+if (!prefersReduced && hasGsap) {
+  window.gsap.registerPlugin(window.ScrollTrigger);
 
   // Kill CSS reveal system — GSAP takes over
   document.querySelectorAll('.reveal').forEach(el => {
@@ -13,7 +14,7 @@ if (!prefersReduced) {
   });
 
   // ── 1. Hero entrance: staggered fade-in ──
-  const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  const heroTl = window.gsap.timeline({ defaults: { ease: 'power3.out' } });
   heroTl
     .from('.hero-tag', { opacity: 0, y: 20, duration: 0.6 })
     .from('.hero h1', { opacity: 0, y: 30, duration: 0.8 }, '-=0.3')
@@ -23,7 +24,7 @@ if (!prefersReduced) {
     .call(() => document.querySelector('.hero h1 em')?.classList.add('underlined'));
 
   // ── 2. Hero glow: subtle parallax on scroll ──
-  gsap.to('.hero-glow', {
+  window.gsap.to('.hero-glow', {
     y: -120,
     ease: 'none',
     scrollTrigger: {
@@ -34,7 +35,7 @@ if (!prefersReduced) {
     }
   });
 
-  gsap.to('.hero-grid-bg', {
+  window.gsap.to('.hero-grid-bg', {
     opacity: 0,
     ease: 'none',
     scrollTrigger: {
@@ -46,8 +47,8 @@ if (!prefersReduced) {
   });
 
   // ── 3. Section titles: slide in from left with accent line ──
-  gsap.utils.toArray('.section-label').forEach(label => {
-    gsap.from(label, {
+  window.gsap.utils.toArray('.section-label').forEach(label => {
+    window.gsap.from(label, {
       x: -30,
       opacity: 0,
       duration: 0.5,
@@ -56,8 +57,8 @@ if (!prefersReduced) {
     });
   });
 
-  gsap.utils.toArray('.section-title').forEach(title => {
-    gsap.from(title, {
+  window.gsap.utils.toArray('.section-title').forEach(title => {
+    window.gsap.from(title, {
       y: 24,
       opacity: 0,
       duration: 0.6,
@@ -66,8 +67,8 @@ if (!prefersReduced) {
     });
   });
 
-  gsap.utils.toArray('.section-desc').forEach(desc => {
-    gsap.from(desc, {
+  window.gsap.utils.toArray('.section-desc').forEach(desc => {
+    window.gsap.from(desc, {
       y: 16,
       opacity: 0,
       duration: 0.5,
@@ -89,7 +90,7 @@ if (!prefersReduced) {
   cardGrids.forEach(selector => {
     const grid = document.querySelector(selector);
     if (!grid) return;
-    gsap.from(grid.children, {
+    window.gsap.from(grid.children, {
       y: 40,
       opacity: 0,
       duration: 0.55,
@@ -100,7 +101,7 @@ if (!prefersReduced) {
   });
 
   // ── 5. Process steps: stagger with slight scale ──
-  gsap.from('.process-step', {
+  window.gsap.from('.process-step', {
     y: 30,
     opacity: 0,
     scale: 0.97,
@@ -111,7 +112,7 @@ if (!prefersReduced) {
   });
 
   // ── 6. Framework stack: layers cascade down ──
-  gsap.from('.fw-layer', {
+  window.gsap.from('.fw-layer', {
     x: -24,
     opacity: 0,
     duration: 0.45,
@@ -120,7 +121,7 @@ if (!prefersReduced) {
     scrollTrigger: { trigger: '.framework-visual', start: 'top 80%', toggleActions: 'play none none none' }
   });
 
-  gsap.from('.framework-text > *', {
+  window.gsap.from('.framework-text > *', {
     y: 20,
     opacity: 0,
     duration: 0.5,
@@ -130,7 +131,7 @@ if (!prefersReduced) {
   });
 
   // ── 7. Result numbers: count-up animation ──
-  gsap.utils.toArray('.result-num').forEach(num => {
+  window.gsap.utils.toArray('.result-num').forEach(num => {
     const text = num.textContent.trim();
     // Parse the numeric part
     const match = text.match(/^([<>]?)(\d+)(.*)$/);
@@ -141,7 +142,7 @@ if (!prefersReduced) {
     const suffix = match[3];
     const obj = { val: 0 };
 
-    gsap.to(obj, {
+    window.gsap.to(obj, {
       val: target,
       duration: 1.4,
       ease: 'power2.out',
@@ -153,8 +154,8 @@ if (!prefersReduced) {
   });
 
   // ── 8. FAQ items: subtle stagger ──
-  gsap.utils.toArray('.faq-list').forEach(list => {
-    gsap.from(list.querySelectorAll('.faq-item'), {
+  window.gsap.utils.toArray('.faq-list').forEach(list => {
+    window.gsap.from(list.querySelectorAll('.faq-item'), {
       y: 16,
       opacity: 0,
       duration: 0.4,
@@ -165,7 +166,7 @@ if (!prefersReduced) {
   });
 
   // ── 9. CTA section: gentle scale-up ──
-  gsap.from('.cta-content', {
+  window.gsap.from('.cta-content', {
     y: 40,
     opacity: 0,
     scale: 0.98,
@@ -175,7 +176,7 @@ if (!prefersReduced) {
   });
 
   // ── 10. CTA glow: parallax drift ──
-  gsap.to('.cta-glow', {
+  window.gsap.to('.cta-glow', {
     y: -60,
     ease: 'none',
     scrollTrigger: {
@@ -200,7 +201,7 @@ if (!prefersReduced) {
       card.style.setProperty('--mouse-y', y + 'px');
 
       // Subtle tilt
-      gsap.to(card, {
+      window.gsap.to(card, {
         rotateY: px * 3,
         rotateX: -py * 3,
         duration: 0.4,
@@ -210,7 +211,7 @@ if (!prefersReduced) {
     });
 
     card.addEventListener('mouseleave', () => {
-      gsap.to(card, {
+      window.gsap.to(card, {
         rotateY: 0,
         rotateX: 0,
         duration: 0.5,
@@ -225,7 +226,7 @@ if (!prefersReduced) {
       const rect = btn.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      gsap.to(btn, {
+      window.gsap.to(btn, {
         x: x * 0.15,
         y: y * 0.15,
         duration: 0.3,
@@ -234,7 +235,7 @@ if (!prefersReduced) {
     });
 
     btn.addEventListener('mouseleave', () => {
-      gsap.to(btn, {
+      window.gsap.to(btn, {
         x: 0,
         y: 0,
         duration: 0.5,
@@ -249,8 +250,8 @@ if (!prefersReduced) {
   }, 1200);
 
   // ── 14. Accent text shimmer on section titles ──
-  gsap.utils.toArray('.section-title em').forEach(em => {
-    gsap.fromTo(em, {
+  window.gsap.utils.toArray('.section-title em').forEach(em => {
+    window.gsap.fromTo(em, {
       backgroundImage: 'linear-gradient(90deg, var(--accent) 0%, rgba(67,55,163,0.5) 50%, var(--accent) 100%)',
       backgroundSize: '200% 100%',
       backgroundClip: 'text',
@@ -269,7 +270,7 @@ if (!prefersReduced) {
     const icon = card.querySelector('.problem-icon');
     if (!icon) return;
     card.addEventListener('mouseenter', () => {
-      gsap.fromTo(icon, { scale: 1 }, { scale: 1.1, duration: 0.25, ease: 'power2.out', yoyo: true, repeat: 1 });
+      window.gsap.fromTo(icon, { scale: 1 }, { scale: 1.1, duration: 0.25, ease: 'power2.out', yoyo: true, repeat: 1 });
     });
   });
 

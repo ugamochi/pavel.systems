@@ -3,10 +3,18 @@ import { initTheme } from './modules/theme.js';
 import { initForm } from './modules/form.js';
 import { getServicePage } from './data/service-pages.js';
 
-initNav();
-initTheme();
-initBookingContext();
-initForm();
+function safeInit(name, initializer) {
+  try {
+    initializer();
+  } catch (error) {
+    console.error(`[init] ${name} failed`, error);
+  }
+}
+
+safeInit('nav', initNav);
+safeInit('theme', initTheme);
+safeInit('booking-context', initBookingContext);
+safeInit('form', initForm);
 
 function initBookingContext() {
   const params = new URLSearchParams(window.location.search);
